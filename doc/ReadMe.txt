@@ -1,1 +1,0 @@
-contains external documentation usefull for the project.
