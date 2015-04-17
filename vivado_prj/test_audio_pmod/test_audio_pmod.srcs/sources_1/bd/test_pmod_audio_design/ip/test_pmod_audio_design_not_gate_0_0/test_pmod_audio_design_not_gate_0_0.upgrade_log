@@ -1,0 +1,16 @@
+Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2014.4 (lin64) Build 1071353 Tue Nov 18 16:47:07 MST 2014
+| Date         : Tue Mar 31 13:55:49 2015
+| Host         : arrow-platform running 64-bit Ubuntu 13.10
+| Command      : upgrade_ip
+| Device       : xc7a100tcsg324-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'test_pmod_audio_design_not_gate_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of test_pmod_audio_design_not_gate_0_0 (hepia:user:not_gate:1.0) from (Rev. 2) to (Rev. 3)
+

@@ -1,0 +1,10 @@
+#-----------------------------------------------------------
+# Vivado v2014.4 (64-bit)
+# SW Build 1071353 on Tue Nov 18 16:47:07 MST 2014
+# IP Build 1070531 on Tue Nov 18 01:10:18 MST 2014
+# Start of session at: Tue Mar 31 17:49:32 2015
+# Process ID: 22775
+# Log file: /home/laurent/Projects/MSE_LPSC/Audio/vivado_prj/test_audio_pmod/test_audio_pmod.runs/impl_1/test_pmod_audio.vdi
+# Journal file: /home/laurent/Projects/MSE_LPSC/Audio/vivado_prj/test_audio_pmod/test_audio_pmod.runs/impl_1/vivado.jou
+#-----------------------------------------------------------
+source test_pmod_audio.tcl -notrace

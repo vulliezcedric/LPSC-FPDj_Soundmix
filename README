@@ -1,0 +1,27 @@
+#--------------------------------------------------------------#
+# Author: hepia // HES-SO
+# Description: Nexys 4 pMOD audio example design
+#--------------------------------------------------------------#
+
+The example design realized the link between an audio input pMOD module (12-bits) and an audio output module (16-bits) :
+
+- The audio input pMOD should be connected to the JC connector. Only the left channel is connected.
+
+- The audio output pMOD should be connected to the JA connector.
+
+
+The archive is organized as follow:
+
+- doc
+  - Audio_in: Audio input pMOD documentation
+  - Audio_out: Audio output pMOD documentation
+
+- vivado_prj
+  - not_gate : Bit inverter component
+  - pMOD_Audio_in : Audio input pMOD component
+  - pMOD_Audio_out : Audio output pMOD component
+  - test_audio_pmod : Top-Level design
+  - upsizer_msb : Component used to connect two vectors of different length
+
+- README: This file
+

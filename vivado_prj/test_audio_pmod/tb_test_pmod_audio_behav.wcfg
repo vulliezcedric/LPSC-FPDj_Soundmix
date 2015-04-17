@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_test_pmod_audio_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="tb_test_pmod_audio" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="19" />
+   <wvobject db_ref_id="1" type="logic" fp_name="/tb_test_pmod_audio/clk_i">
+      <obj_property name="ElementShortName">clk_i</obj_property>
+      <obj_property name="ObjectShortName">clk_i</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/tb_test_pmod_audio/resetn_i">
+      <obj_property name="ElementShortName">resetn_i</obj_property>
+      <obj_property name="ObjectShortName">resetn_i</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/tb_test_pmod_audio/test_pmod_audio_1/test_pmod_audio_design_i/clk_wiz_0/U0/locked">
+      <obj_property name="ElementShortName">locked</obj_property>
+      <obj_property name="ObjectShortName">locked</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/tb_test_pmod_audio/test_pmod_audio_1/test_pmod_audio_design_i/clk_wiz_0/U0/clk_out1">
+      <obj_property name="ElementShortName">clk_out1</obj_property>
+      <obj_property name="ObjectShortName">clk_out1</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider56" type="divider">
+      <obj_property name="label">Audio IN</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/tb_test_pmod_audio/audio_in_SDATA">
+      <obj_property name="ElementShortName">audio_in_SDATA</obj_property>
+      <obj_property name="ObjectShortName">audio_in_SDATA</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/tb_test_pmod_audio/audio_in_SCLK">
+      <obj_property name="ElementShortName">audio_in_SCLK</obj_property>
+      <obj_property name="ObjectShortName">audio_in_SCLK</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/tb_test_pmod_audio/audio_in_nCS">
+      <obj_property name="ElementShortName">audio_in_nCS</obj_property>
+      <obj_property name="ObjectShortName">audio_in_nCS</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/tb_test_pmod_audio/test_pmod_audio_1/test_pmod_audio_design_i/pMOD_Audio_in_0/U0/START">
+      <obj_property name="ElementShortName">START</obj_property>
+      <obj_property name="ObjectShortName">START</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/tb_test_pmod_audio/test_pmod_audio_1/test_pmod_audio_design_i/pMOD_Audio_in_0/U0/DONE">
+      <obj_property name="ElementShortName">DONE</obj_property>
+      <obj_property name="ObjectShortName">DONE</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="other" fp_name="/tb_test_pmod_audio/test_pmod_audio_1/test_pmod_audio_design_i/pMOD_Audio_in_0/U0/current_state">
+      <obj_property name="ElementShortName">current_state</obj_property>
+      <obj_property name="ObjectShortName">current_state</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/tb_test_pmod_audio/test_pmod_audio_1/test_pmod_audio_design_i/pMOD_Audio_in_0/U0/SDATA">
+      <obj_property name="ElementShortName">SDATA</obj_property>
+      <obj_property name="ObjectShortName">SDATA</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider78" type="divider">
+      <obj_property name="label">Audio OUT</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/tb_test_pmod_audio/audio_out_SDOUT">
+      <obj_property name="ElementShortName">audio_out_SDOUT</obj_property>
+      <obj_property name="ObjectShortName">audio_out_SDOUT</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/tb_test_pmod_audio/audio_out_SCLK">
+      <obj_property name="ElementShortName">audio_out_SCLK</obj_property>
+      <obj_property name="ObjectShortName">audio_out_SCLK</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/tb_test_pmod_audio/audio_out_MCLK">
+      <obj_property name="ElementShortName">audio_out_MCLK</obj_property>
+      <obj_property name="ObjectShortName">audio_out_MCLK</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/tb_test_pmod_audio/audio_out_LRCK">
+      <obj_property name="ElementShortName">audio_out_LRCK</obj_property>
+      <obj_property name="ObjectShortName">audio_out_LRCK</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="array" fp_name="/tb_test_pmod_audio/leds_o">
+      <obj_property name="ElementShortName">leds_o[1:0]</obj_property>
+      <obj_property name="ObjectShortName">leds_o[1:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="array" fp_name="/tb_test_pmod_audio/test_pmod_audio_1/test_pmod_audio_design_i/pMOD_Audio_out_0/U0/div_cnt">
+      <obj_property name="ElementShortName">div_cnt[9:0]</obj_property>
+      <obj_property name="ObjectShortName">div_cnt[9:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+</wave_config>

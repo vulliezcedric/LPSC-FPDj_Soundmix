@@ -1,0 +1,12 @@
+
+****** Webtalk v2014.4 (64-bit)
+  **** SW Build 1071353 on Tue Nov 18 18:24:04 MST 2014
+  **** IP Build 1070531 on Tue Nov 18 01:10:18 MST 2014
+    ** Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/Julien/Desktop/Audio/vivado_prj/test_audio_pmod/test_audio_pmod.hw/webtalk/labtool_webtalk.tcl -notrace
+
+    while executing
+"webtalk_transmit -clientid 1187658542 -regid "210833156_0_0_573" -xml C:/Users/Julien/Desktop/Audio/vivado_prj/test_audio_pmod/test_audio_pmod.hw/webt..."
+    (file "C:/Users/Julien/Desktop/Audio/vivado_prj/test_audio_pmod/test_audio_pmod.hw/webtalk/labtool_webtalk.tcl" line 28)
+INFO: [Common 17-206] Exiting Webtalk at Fri Apr 17 13:30:28 2015...

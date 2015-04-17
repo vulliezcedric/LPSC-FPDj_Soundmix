@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<bd:repository xmlns:bd="http://www.xilinx.com/bd" bd:synthFlowMode="None" bd:tool_version="2014.4" bd:top="test_pmod_audio_design" bd:version="1.00.a">
+
+  <spirit:component xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009">
+    <spirit:vendor>xilinx.com</spirit:vendor>
+    <spirit:library>BlockDiagram</spirit:library>
+    <spirit:name>test_pmod_audio_design</spirit:name>
+    <spirit:version>1.00.a</spirit:version>
+    <spirit:parameters>
+      <spirit:parameter>
+        <spirit:name>isTop</spirit:name>
+        <spirit:value spirit:format="bool" spirit:resolve="immediate">true</spirit:value>
+      </spirit:parameter>
+    </spirit:parameters>
+    <spirit:busInterfaces>
+      <spirit:busInterface>
+        <spirit:name>CLK.CLK_IN</spirit:name>
+        <spirit:displayName>Clk</spirit:displayName>
+        <spirit:description>Clock</spirit:description>
+        <spirit:busType spirit:library="signal" spirit:name="clock" spirit:vendor="xilinx.com" spirit:version="1.0"/>
+        <spirit:abstractionType spirit:library="signal" spirit:name="clock_rtl" spirit:vendor="xilinx.com" spirit:version="1.0"/>
+        <spirit:slave/>
+        <spirit:portMaps>
+          <spirit:portMap>
+            <spirit:logicalPort>
+              <spirit:name>CLK</spirit:name>
+            </spirit:logicalPort>
+            <spirit:physicalPort>
+              <spirit:name>clk_in</spirit:name>
+            </spirit:physicalPort>
+          </spirit:portMap>
+        </spirit:portMaps>
+        <spirit:parameters/>
+      </spirit:busInterface>
+      <spirit:busInterface>
+        <spirit:name>RST.RESET</spirit:name>
+        <spirit:displayName>Reset</spirit:displayName>
+        <spirit:description>Reset</spirit:description>
+        <spirit:busType spirit:library="signal" spirit:name="reset" spirit:vendor="xilinx.com" spirit:version="1.0"/>
+        <spirit:abstractionType spirit:library="signal" spirit:name="reset_rtl" spirit:vendor="xilinx.com" spirit:version="1.0"/>
+        <spirit:slave/>
+        <spirit:portMaps>
+          <spirit:portMap>
+            <spirit:logicalPort>
+              <spirit:name>RST</spirit:name>
+            </spirit:logicalPort>
+            <spirit:physicalPort>
+              <spirit:name>reset</spirit:name>
+            </spirit:physicalPort>
+          </spirit:portMap>
+        </spirit:portMaps>
+        <spirit:parameters>
+          <spirit:parameter>
+            <spirit:name>POLARITY</spirit:name>
+            <spirit:value>ACTIVE_HIGH</spirit:value>
+          </spirit:parameter>
+        </spirit:parameters>
+      </spirit:busInterface>
+    </spirit:busInterfaces>
+    <spirit:model>
+      <spirit:views>
+        <spirit:view>
+          <spirit:name>BlockDiagram</spirit:name>
+          <spirit:envIdentifier>:vivado.xilinx.com:</spirit:envIdentifier>
+          <spirit:hierarchyRef spirit:library="BlockDiagram" spirit:name="test_pmod_audio_design_imp" spirit:vendor="xilinx.com" spirit:version="1.00.a"/>
+        </spirit:view>
+      </spirit:views>
+      <spirit:ports>
+        <spirit:port>
+          <spirit:name>clk_in</spirit:name>
+          <spirit:wire>
+            <spirit:direction>in</spirit:direction>
+          </spirit:wire>
+        </spirit:port>
+        <spirit:port>
+          <spirit:name>reset</spirit:name>
+          <spirit:wire>
+            <spirit:direction>in</spirit:direction>
+          </spirit:wire>
+        </spirit:port>
+        <spirit:port>
+          <spirit:name>locked</spirit:name>
+          <spirit:wire>
+            <spirit:direction>out</spirit:direction>
+          </spirit:wire>
+        </spirit:port>
+        <spirit:port>
+          <spirit:name>audio_in_SDATA</spirit:name>
+          <spirit:wire>
+            <spirit:direction>in</spirit:direction>
+          </spirit:wire>
+        </spirit:port>
+        <spirit:port>
+          <spirit:name>audio_out_SDOUT</spirit:name>
+          <spirit:wire>
+            <spirit:direction>out</spirit:direction>
+          </spirit:wire>
+        </spirit:port>
+        <spirit:port>
+          <spirit:name>audio_out_SCLK</spirit:name>
+          <spirit:wire>
+            <spirit:direction>out</spirit:direction>
+          </spirit:wire>
+        </spirit:port>
+        <spirit:port>
+          <spirit:name>audio_out_MCLK</spirit:name>
+          <spirit:wire>
+            <spirit:direction>out</spirit:direction>
+          </spirit:wire>
+        </spirit:port>
+        <spirit:port>
+          <spirit:name>audio_out_LRCK</spirit:name>
+          <spirit:wire>
+            <spirit:direction>out</spirit:direction>
+          </spirit:wire>
+        </spirit:port>
+        <spirit:port>
+          <spirit:name>audio_in_SCLK</spirit:name>
+          <spirit:wire>
+            <spirit:direction>out</spirit:direction>
+          </spirit:wire>
+        </spirit:port>
+        <spirit:port>
+          <spirit:name>audio_in_nCS</spirit:name>
+          <spirit:wire>
+            <spirit:direction>out</spirit:direction>
+          </spirit:wire>
+        </spirit:port>
+      </spirit:ports>
+    </spirit:model>
+  </spirit:component>
+
+  <spirit:design xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009">
+    <spirit:vendor>xilinx.com</spirit:vendor>
+    <spirit:library>BlockDiagram</spirit:library>
+    <spirit:name>test_pmod_audio_design_imp</spirit:name>
+    <spirit:version>1.00.a</spirit:version>
+    <spirit:componentInstances>
+      <spirit:componentInstance>
+        <spirit:instanceName>clk_wiz_0</spirit:instanceName>
+        <spirit:componentRef spirit:library="ip" spirit:name="clk_wiz" spirit:vendor="xilinx.com" spirit:version="5.1"/>
+        <spirit:configurableElementValues>
+          <spirit:configurableElementValue spirit:referenceId="bd:xciName">test_pmod_audio_design_clk_wiz_0_0</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="PRIMITIVE">PLL</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="CLKOUT1_REQUESTED_OUT_FREQ">50.000</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="CLKOUT1_JITTER">167.017</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="CLKOUT1_PHASE_ERROR">114.212</spirit:configurableElementValue>
+        </spirit:configurableElementValues>
+      </spirit:componentInstance>
+      <spirit:componentInstance>
+        <spirit:instanceName>pMOD_Audio_in_0</spirit:instanceName>
+        <spirit:componentRef spirit:library="user" spirit:name="pMOD_Audio_in" spirit:vendor="hepia" spirit:version="1.0"/>
+        <spirit:configurableElementValues>
+          <spirit:configurableElementValue spirit:referenceId="bd:xciName">test_pmod_audio_design_pMOD_Audio_in_0_0</spirit:configurableElementValue>
+        </spirit:configurableElementValues>
+      </spirit:componentInstance>
+      <spirit:componentInstance>
+        <spirit:instanceName>pMOD_Audio_out_0</spirit:instanceName>
+        <spirit:componentRef spirit:library="user" spirit:name="pMOD_Audio_out" spirit:vendor="hepia" spirit:version="1.0"/>
+        <spirit:configurableElementValues>
+          <spirit:configurableElementValue spirit:referenceId="bd:xciName">test_pmod_audio_design_pMOD_Audio_out_0_0</spirit:configurableElementValue>
+        </spirit:configurableElementValues>
+      </spirit:componentInstance>
+      <spirit:componentInstance>
+        <spirit:instanceName>upsizer_msb_0</spirit:instanceName>
+        <spirit:componentRef spirit:library="user" spirit:name="upsizer_msb" spirit:vendor="hepia" spirit:version="1.0"/>
+        <spirit:configurableElementValues>
+          <spirit:configurableElementValue spirit:referenceId="bd:xciName">test_pmod_audio_design_upsizer_msb_0_1</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="IN_WIDTH">12</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="OUT_WIDTH">16</spirit:configurableElementValue>
+        </spirit:configurableElementValues>
+      </spirit:componentInstance>
+      <spirit:componentInstance>
+        <spirit:instanceName>not_gate_0</spirit:instanceName>
+        <spirit:componentRef spirit:library="user" spirit:name="not_gate" spirit:vendor="hepia" spirit:version="1.0"/>
+        <spirit:configurableElementValues>
+          <spirit:configurableElementValue spirit:referenceId="bd:xciName">test_pmod_audio_design_not_gate_0_0</spirit:configurableElementValue>
+        </spirit:configurableElementValues>
+      </spirit:componentInstance>
+    </spirit:componentInstances>
+    <spirit:adHocConnections>
+      <spirit:adHocConnection>
+        <spirit:name>clk_in1_1</spirit:name>
+        <spirit:externalPortReference spirit:portRef="clk_in"/>
+        <spirit:internalPortReference spirit:componentRef="clk_wiz_0" spirit:portRef="clk_in1"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>clk_wiz_0_clk_out1</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="clk_wiz_0" spirit:portRef="clk_out1"/>
+        <spirit:internalPortReference spirit:componentRef="pMOD_Audio_in_0" spirit:portRef="CLK"/>
+        <spirit:internalPortReference spirit:componentRef="pMOD_Audio_out_0" spirit:portRef="clk"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>clk_wiz_0_locked</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="clk_wiz_0" spirit:portRef="locked"/>
+        <spirit:externalPortReference spirit:portRef="locked"/>
+        <spirit:internalPortReference spirit:componentRef="not_gate_0" spirit:portRef="I"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>SDATA_1</spirit:name>
+        <spirit:externalPortReference spirit:portRef="audio_in_SDATA"/>
+        <spirit:internalPortReference spirit:componentRef="pMOD_Audio_in_0" spirit:portRef="SDATA"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>pMOD_Audio_out_0_done</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="pMOD_Audio_out_0" spirit:portRef="done"/>
+        <spirit:internalPortReference spirit:componentRef="pMOD_Audio_in_0" spirit:portRef="START"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>pMOD_Audio_out_0_SDOUT</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="pMOD_Audio_out_0" spirit:portRef="SDOUT"/>
+        <spirit:externalPortReference spirit:portRef="audio_out_SDOUT"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>pMOD_Audio_out_0_SCLK</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="pMOD_Audio_out_0" spirit:portRef="SCLK"/>
+        <spirit:externalPortReference spirit:portRef="audio_out_SCLK"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>pMOD_Audio_out_0_MCLK</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="pMOD_Audio_out_0" spirit:portRef="MCLK"/>
+        <spirit:externalPortReference spirit:portRef="audio_out_MCLK"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>pMOD_Audio_out_0_LRCK</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="pMOD_Audio_out_0" spirit:portRef="LRCK"/>
+        <spirit:externalPortReference spirit:portRef="audio_out_LRCK"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>pMOD_Audio_in_0_SCLK</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="pMOD_Audio_in_0" spirit:portRef="SCLK"/>
+        <spirit:externalPortReference spirit:portRef="audio_in_SCLK"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>pMOD_Audio_in_0_nCS</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="pMOD_Audio_in_0" spirit:portRef="nCS"/>
+        <spirit:externalPortReference spirit:portRef="audio_in_nCS"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>pMOD_Audio_in_0_DATA</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="pMOD_Audio_in_0" spirit:portRef="DATA"/>
+        <spirit:internalPortReference spirit:componentRef="upsizer_msb_0" spirit:portRef="data_in"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>upsizer_msb_0_data_out</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="upsizer_msb_0" spirit:portRef="data_out"/>
+        <spirit:internalPortReference spirit:componentRef="pMOD_Audio_out_0" spirit:portRef="audio_in"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>reset_1</spirit:name>
+        <spirit:externalPortReference spirit:portRef="reset"/>
+        <spirit:internalPortReference spirit:componentRef="clk_wiz_0" spirit:portRef="reset"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>not_gate_0_O</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="not_gate_0" spirit:portRef="O"/>
+        <spirit:internalPortReference spirit:componentRef="pMOD_Audio_out_0" spirit:portRef="rst"/>
+        <spirit:internalPortReference spirit:componentRef="pMOD_Audio_in_0" spirit:portRef="RST"/>
+      </spirit:adHocConnection>
+    </spirit:adHocConnections>
+  </spirit:design>
+
+</bd:repository>

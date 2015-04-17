@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenRun Id="synth_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1427816947">
+  <File Type="VDS-TIMING-PB" Name="test_pmod_audio_timing_summary_synth.pb"/>
+  <File Type="VDS-TIMINGSUMMARY" Name="test_pmod_audio_timing_summary_synth.rpt"/>
+  <File Type="RDS-DCP" Name="test_pmod_audio.dcp"/>
+  <File Type="RDS-UTIL-PB" Name="test_pmod_audio_utilization_synth.pb"/>
+  <File Type="RDS-UTIL" Name="test_pmod_audio_utilization_synth.rpt"/>
+  <File Type="RUN-STRAT" Name="$PDATADIR/runs/synth_1/synth_1.psg"/>
+  <File Type="PA-TCL" Name="test_pmod_audio.tcl"/>
+  <File Type="RDS-PROPCONSTRS" Name="test_pmod_audio_drc_synth.rpt"/>
+  <File Type="RDS-RDS" Name="test_pmod_audio.vds"/>
+  <File Type="VDS-HWDEF" Name="test_pmod_audio.hwdef"/>
+  <File Type="RUN-SRCS" Name="$PDATADIR/runs/synth_1/sources.xml"/>
+  <File Type="RUN-CONSTRS" Name="$PDATADIR/runs/synth_1/constrs_in.xml"/>
+  <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
+    <Filter Type="Srcs"/>
+    <File Path="$PSRCDIR/sources_1/bd/test_pmod_audio_design/test_pmod_audio_design.bd">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/test_pmod_audio.vhd">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/bd/test_pmod_audio_design/ip/test_pmod_audio_design_upsizer_msb_0_1/test_pmod_audio_design_upsizer_msb_0_1.upgrade_log"/>
+    <File Path="$PSRCDIR/sources_1/bd/test_pmod_audio_design/ip/test_pmod_audio_design_not_gate_0_0/test_pmod_audio_design_not_gate_0_0.upgrade_log"/>
+    <Config>
+      <Option Name="DesignMode" Val="RTL"/>
+      <Option Name="TopModule" Val="test_pmod_audio"/>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
+    <Filter Type="Constrs"/>
+    <File Path="$PSRCDIR/constrs_1/new/constraints.xdc">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="TargetConstrsFile" Val="$PSRCDIR/constrs_1/new/constraints.xdc"/>
+      <Option Name="ConstrsType" Val="XDC"/>
+    </Config>
+  </FileSet>
+  <Strategy Version="1" Minor="2">
+    <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2014"/>
+    <Step Id="synth_design"/>
+  </Strategy>
+</GenRun>

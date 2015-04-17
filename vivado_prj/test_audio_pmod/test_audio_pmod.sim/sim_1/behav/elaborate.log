@@ -1,0 +1,38 @@
+Vivado Simulator 2014.4
+Copyright 1986-1999, 2001-2014 Xilinx, Inc. All Rights Reserved.
+Running: /opt/Xilinx/Vivado/2014.4/bin/unwrapped/lnx64.o/xelab -wto e8c0e5a7bc6a41a3aaf1f6aeda107647 --debug typical --relax -L xil_defaultlib -L secureip --snapshot tb_test_pmod_audio_behav xil_defaultlib.tb_test_pmod_audio -log elaborate.log 
+Multi-threading is on. Using 6 slave threads.
+WARNING: [XSIM 43-3431] One or more environment variables have been detected which affect the operation of the C compiler. These are typically not set in standard installations and are not tested by Xilinx, however they may be appropriate for your system, so the flow will attempt to continue.  If errors occur, try running fuse with the "-mt off -v 1" switches to see more information from the C compiler. The following environment variables have been detected:
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package ieee.std_logic_1164
+Compiling package unisim.vcomponents
+Compiling package ieee.std_logic_arith
+Compiling package ieee.std_logic_unsigned
+Compiling package ieee.numeric_std
+Compiling package ieee.std_logic_signed
+Compiling package std.textio
+Compiling package ieee.vital_timing
+Compiling package ieee.vital_primitives
+Compiling package unisim.vpkg
+Compiling architecture ibuf_v of entity unisim.IBUF [\IBUF("DONT_CARE","0",true,"AUTO...]
+Compiling architecture plle2_adv_v of entity unisim.PLLE2_ADV [\PLLE2_ADV("OPTIMIZED",8,0.0,10....]
+Compiling architecture bufg_v of entity unisim.BUFG [bufg_default]
+Compiling architecture xilinx of entity xil_defaultlib.test_pmod_audio_design_clk_wiz_0_0_clk_wiz [test_pmod_audio_design_clk_wiz_0...]
+Compiling architecture xilinx of entity xil_defaultlib.test_pmod_audio_design_clk_wiz_0_0 [test_pmod_audio_design_clk_wiz_0...]
+Compiling architecture arch of entity xil_defaultlib.not_gate [not_gate_default]
+Compiling architecture test_pmod_audio_design_not_gate_0_0_arch of entity xil_defaultlib.test_pmod_audio_design_not_gate_0_0 [test_pmod_audio_design_not_gate_...]
+Compiling architecture arch of entity xil_defaultlib.pMOD_Audio_in [pmod_audio_in_default]
+Compiling architecture test_pmod_audio_design_pmod_audio_in_0_0_arch of entity xil_defaultlib.test_pmod_audio_design_pMOD_Audio_in_0_0 [test_pmod_audio_design_pmod_audi...]
+Compiling architecture arch of entity xil_defaultlib.pMOD_Audio_out [pmod_audio_out_default]
+Compiling architecture test_pmod_audio_design_pmod_audio_out_0_0_arch of entity xil_defaultlib.test_pmod_audio_design_pMOD_Audio_out_0_0 [test_pmod_audio_design_pmod_audi...]
+Compiling architecture arch of entity xil_defaultlib.upsizer_msb [\upsizer_msb(12,16)\]
+Compiling architecture test_pmod_audio_design_upsizer_msb_0_1_arch of entity xil_defaultlib.test_pmod_audio_design_upsizer_msb_0_1 [test_pmod_audio_design_upsizer_m...]
+Compiling architecture structure of entity xil_defaultlib.test_pmod_audio_design [test_pmod_audio_design_default]
+Compiling architecture arch of entity xil_defaultlib.test_pmod_audio [test_pmod_audio_default]
+Compiling architecture behavioral of entity xil_defaultlib.tb_test_pmod_audio
+Built simulation snapshot tb_test_pmod_audio_behav
