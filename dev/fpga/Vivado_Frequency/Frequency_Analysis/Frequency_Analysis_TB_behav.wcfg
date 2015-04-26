@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="Frequency_Analysis_TB_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="Frequency_Analysis_TB" />
+            <top_module name="fir_index_package" />
+            <top_module name="package_fpdj" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="53" />
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/aclk" type="logic">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Reset_s" type="logic">
+      <obj_property name="ElementShortName">Reset_s</obj_property>
+      <obj_property name="ObjectShortName">Reset_s</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Audio_Left_Channel_s" type="array">
+      <obj_property name="ElementShortName">Audio_Left_Channel_s[11:0]</obj_property>
+      <obj_property name="ObjectShortName">Audio_Left_Channel_s[11:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Audio_Right_Channel_s" type="array">
+      <obj_property name="ElementShortName">Audio_Right_Channel_s[11:0]</obj_property>
+      <obj_property name="ObjectShortName">Audio_Right_Channel_s[11:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Data_Ready_s" type="logic">
+      <obj_property name="ElementShortName">Data_Ready_s</obj_property>
+      <obj_property name="ObjectShortName">Data_Ready_s</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Data_valid_s" type="logic">
+      <obj_property name="ElementShortName">Data_valid_s</obj_property>
+      <obj_property name="ObjectShortName">Data_valid_s</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/CLOCK_PERIOD" type="other">
+      <obj_property name="ElementShortName">CLOCK_PERIOD</obj_property>
+      <obj_property name="ObjectShortName">CLOCK_PERIOD</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/T_HOLD" type="other">
+      <obj_property name="ElementShortName">T_HOLD</obj_property>
+      <obj_property name="ObjectShortName">T_HOLD</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/T_STROBE" type="other">
+      <obj_property name="ElementShortName">T_STROBE</obj_property>
+      <obj_property name="ObjectShortName">T_STROBE</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/IP_WIDTH" type="other">
+      <obj_property name="ElementShortName">IP_WIDTH</obj_property>
+      <obj_property name="ObjectShortName">IP_WIDTH</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/MAX_SAMPLES" type="other">
+      <obj_property name="ElementShortName">MAX_SAMPLES</obj_property>
+      <obj_property name="ObjectShortName">MAX_SAMPLES</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/IP_TABLE_CLEAR" type="array">
+      <obj_property name="ElementShortName">IP_TABLE_CLEAR[0:511]</obj_property>
+      <obj_property name="ObjectShortName">IP_TABLE_CLEAR[0:511]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/IP_DATA" type="array">
+      <obj_property name="ElementShortName">IP_DATA[0:511]</obj_property>
+      <obj_property name="ObjectShortName">IP_DATA[0:511]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/Clk_i" type="logic">
+      <obj_property name="ElementShortName">Clk_i</obj_property>
+      <obj_property name="ObjectShortName">Clk_i</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/Reset_i" type="logic">
+      <obj_property name="ElementShortName">Reset_i</obj_property>
+      <obj_property name="ObjectShortName">Reset_i</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/Audio_Left_Channel_i" type="array">
+      <obj_property name="ElementShortName">Audio_Left_Channel_i[11:0]</obj_property>
+      <obj_property name="ObjectShortName">Audio_Left_Channel_i[11:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/Audio_Right_Channel_i" type="array">
+      <obj_property name="ElementShortName">Audio_Right_Channel_i[11:0]</obj_property>
+      <obj_property name="ObjectShortName">Audio_Right_Channel_i[11:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/Audio_Data_Valid_i" type="logic">
+      <obj_property name="ElementShortName">Audio_Data_Valid_i</obj_property>
+      <obj_property name="ObjectShortName">Audio_Data_Valid_i</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/Bar_intensity_o" type="array">
+      <obj_property name="ElementShortName">Bar_intensity_o[0:15][34:0]</obj_property>
+      <obj_property name="ObjectShortName">Bar_intensity_o[0:15][34:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/Data_Ready_o" type="logic">
+      <obj_property name="ElementShortName">Data_Ready_o</obj_property>
+      <obj_property name="ObjectShortName">Data_Ready_o</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Output_s" type="array">
+      <obj_property name="ElementShortName">FFT_Output_s[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFT_Output_s[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Output_Index_s" type="array">
+      <obj_property name="ElementShortName">FFT_Output_Index_s[15:0]</obj_property>
+      <obj_property name="ObjectShortName">FFT_Output_Index_s[15:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_data_valid_s" type="logic">
+      <obj_property name="ElementShortName">FFT_data_valid_s</obj_property>
+      <obj_property name="ObjectShortName">FFT_data_valid_s</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_data_Last_s" type="logic">
+      <obj_property name="ElementShortName">FFT_data_Last_s</obj_property>
+      <obj_property name="ObjectShortName">FFT_data_Last_s</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Frame_started_s" type="logic">
+      <obj_property name="ElementShortName">FFT_Frame_started_s</obj_property>
+      <obj_property name="ObjectShortName">FFT_Frame_started_s</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_input_Data_s" type="array">
+      <obj_property name="ElementShortName">FFT_input_Data_s[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFT_input_Data_s[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Real_s" type="array">
+      <obj_property name="ElementShortName">FFT_Real_s[15:0]</obj_property>
+      <obj_property name="ObjectShortName">FFT_Real_s[15:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Im_s" type="array">
+      <obj_property name="ElementShortName">FFT_Im_s[15:0]</obj_property>
+      <obj_property name="ObjectShortName">FFT_Im_s[15:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Block/aclk" type="logic">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Block/s_axis_config_tdata" type="array">
+      <obj_property name="ElementShortName">s_axis_config_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_config_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Block/s_axis_config_tvalid" type="logic">
+      <obj_property name="ElementShortName">s_axis_config_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_config_tvalid</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Block/s_axis_config_tready" type="logic">
+      <obj_property name="ElementShortName">s_axis_config_tready</obj_property>
+      <obj_property name="ObjectShortName">s_axis_config_tready</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Block/s_axis_data_tdata" type="array">
+      <obj_property name="ElementShortName">s_axis_data_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_data_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Block/s_axis_data_tvalid" type="logic">
+      <obj_property name="ElementShortName">s_axis_data_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_data_tvalid</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Block/s_axis_data_tready" type="logic">
+      <obj_property name="ElementShortName">s_axis_data_tready</obj_property>
+      <obj_property name="ObjectShortName">s_axis_data_tready</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Block/s_axis_data_tlast" type="logic">
+      <obj_property name="ElementShortName">s_axis_data_tlast</obj_property>
+      <obj_property name="ObjectShortName">s_axis_data_tlast</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Block/m_axis_data_tdata" type="array">
+      <obj_property name="ElementShortName">m_axis_data_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_data_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Block/m_axis_data_tuser" type="array">
+      <obj_property name="ElementShortName">m_axis_data_tuser[15:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_data_tuser[15:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Block/m_axis_data_tvalid" type="logic">
+      <obj_property name="ElementShortName">m_axis_data_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_data_tvalid</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Block/m_axis_data_tlast" type="logic">
+      <obj_property name="ElementShortName">m_axis_data_tlast</obj_property>
+      <obj_property name="ObjectShortName">m_axis_data_tlast</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Block/event_frame_started" type="logic">
+      <obj_property name="ElementShortName">event_frame_started</obj_property>
+      <obj_property name="ObjectShortName">event_frame_started</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Block/event_tlast_unexpected" type="logic">
+      <obj_property name="ElementShortName">event_tlast_unexpected</obj_property>
+      <obj_property name="ObjectShortName">event_tlast_unexpected</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Block/event_tlast_missing" type="logic">
+      <obj_property name="ElementShortName">event_tlast_missing</obj_property>
+      <obj_property name="ObjectShortName">event_tlast_missing</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Block/event_data_in_channel_halt" type="logic">
+      <obj_property name="ElementShortName">event_data_in_channel_halt</obj_property>
+      <obj_property name="ObjectShortName">event_data_in_channel_halt</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/Imsquare_s" type="array">
+      <obj_property name="ElementShortName">Imsquare_s[31:0]</obj_property>
+      <obj_property name="ObjectShortName">Imsquare_s[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/Realsquare_s" type="array">
+      <obj_property name="ElementShortName">Realsquare_s[31:0]</obj_property>
+      <obj_property name="ObjectShortName">Realsquare_s[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Result_s" type="array">
+      <obj_property name="ElementShortName">FFT_Result_s[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFT_Result_s[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/Mult_latency_pipe" type="array">
+      <obj_property name="ElementShortName">Mult_latency_pipe[0:3]</obj_property>
+      <obj_property name="ObjectShortName">Mult_latency_pipe[0:3]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/ADC_Width" type="other">
+      <obj_property name="ElementShortName">ADC_Width</obj_property>
+      <obj_property name="ObjectShortName">ADC_Width</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_scale_sch_C" type="array">
+      <obj_property name="ElementShortName">FFT_scale_sch_C[9:0]</obj_property>
+      <obj_property name="ObjectShortName">FFT_scale_sch_C[9:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_Direction_C" type="logic">
+      <obj_property name="ElementShortName">FFT_Direction_C</obj_property>
+      <obj_property name="ObjectShortName">FFT_Direction_C</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/FFT_config_tdata_C" type="array">
+      <obj_property name="ElementShortName">FFT_config_tdata_C[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFT_config_tdata_C[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Frequency_Analysis_TB/Frequency_Analysis/Multlatency_C" type="other">
+      <obj_property name="ElementShortName">Multlatency_C</obj_property>
+      <obj_property name="ObjectShortName">Multlatency_C</obj_property>
+   </wvobject>
+</wave_config>

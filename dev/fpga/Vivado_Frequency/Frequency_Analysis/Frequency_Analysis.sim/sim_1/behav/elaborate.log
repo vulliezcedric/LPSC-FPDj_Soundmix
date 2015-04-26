@@ -1,0 +1,36 @@
+# do {Frequency_Analysis_TB_elaborate.do} 
+# ** Error: QuestaSim vopt 10.0b Compiler 2011.05 May  5 2011
+# 
+# Top level modules:
+# 	Frequency_Analysis_TB
+# 
+# Analyzing design...
+# ** Warning: (vopt-13) Recompile work.Frequency_Analysis_TB because std.textio has changed.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package MATH_REAL
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package FIR_Index_Package
+# -- Loading package Package_FPDj
+# -- Loading entity Frequency_Analysis_TB
+# ** Warning: (vopt-13) Recompile work.frequency_analysis_tb(behevioral) because std.textio has changed.
+# -- Loading architecture behevioral of Frequency_Analysis_TB
+# -- Loading entity Frequency_Analysis_top
+# ** Warning: (vopt-13) Recompile work.frequency_analysis_top because std.textio has changed.
+# ** Warning: (vopt-13) Recompile work.frequency_analysis_top(behevioral) because std.textio has changed.
+# -- Loading architecture behevioral of Frequency_Analysis_top
+# ** Error: ./../../../../../src/Frequency_Analysis_top.vhd(123): (vopt-1127) Entity xil_defaultlib.xfft_0 was not selected for default binding because it is out of date relative to dependency std.textio. 
+# ** Warning: [1] ./../../../../../src/Frequency_Analysis_top.vhd(123): (vopt-3473) Component instance "FFT_Block : xfft_0" is not bound.
+# ** Warning: [1] ./../../../../../src/Frequency_Analysis_top.vhd(134): (vopt-3473) Component instance "Mult_real : mult_gen_0" is not bound.
+# ** Error: ./../../../../../src/Frequency_Analysis_top.vhd(143): (vopt-1127) Entity xil_defaultlib.mult_gen_0 was not selected for default binding because it is out of date relative to dependency std.textio. 
+# ** Warning: [1] ./../../../../../src/Frequency_Analysis_top.vhd(143): (vopt-3473) Component instance "Mult_im : mult_gen_0" is not bound.
+# ** Error: ./../../../../../src/Frequency_Analysis_top.vhd(190): (vopt-1127) Entity work.intensity_bands_extraction was not selected for default binding because it is out of date relative to dependency std.textio. 
+# ** Warning: [1] ./../../../../../src/Frequency_Analysis_top.vhd(190): (vopt-3473) Component instance "FFT_Intensity : Intensity_Bands_Extraction" is not bound.
+# Optimization failed
+# child process exited abnormally
+# Executing ONERROR command at macro ./Frequency_Analysis_TB_elaborate.do line 12
