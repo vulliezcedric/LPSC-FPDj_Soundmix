@@ -47,6 +47,7 @@ architecture behevioral of Frequency_Analysis_TB is
     variable result : T_IP_TABLE;
     variable theta  : real;
     variable theta2 : real;
+    variable theta3: real;
     variable re_real : real;
     variable im_real : real;
     variable re_int : integer;
@@ -54,11 +55,12 @@ architecture behevioral of Frequency_Analysis_TB is
     constant DATA_WIDTH : integer := 14;
   begin
     for i in 0 to MAX_SAMPLES-1 loop
-      theta   := real(i) / real(MAX_SAMPLES) * 2.6 * 2.0 * MATH_PI;
+      theta   := real(i) / real(MAX_SAMPLES) * 6.0 * 2.0 * MATH_PI;
       re_real := cos(-theta);
       im_real := sin(-theta);
-      theta2  := real(i) / real(MAX_SAMPLES) * 23.2 * 2.0 * MATH_PI;
-      re_real := re_real + (cos(-theta2) / 4.0);
+      theta2  := real(i) / real(MAX_SAMPLES) * 50.0 * 2.0 * MATH_PI;
+      theta3  := real(i) / real(MAX_SAMPLES) * 166.0 * 2.0 * MATH_PI;
+      re_real := re_real + (cos(-theta2) / 4.0) + (cos(-theta3) / 3.0);
       im_real := im_real + (sin(-theta2) / 4.0);
       re_int  := integer(round(re_real * real(2**(DATA_WIDTH))));
       im_int  := integer(round(im_real * real(2**(DATA_WIDTH))));
@@ -89,12 +91,32 @@ port(
 );
 end component;
  
- 
+component Display_manager IS
+generic (
+        horiztonal_size      : INTEGER:= 1280;
+        vertical_size        : INTEGER:= 1024
+);
+    port (
+        Clk_i               : in std_logic;
+        Reset_i             : in std_logic;        
+        Bar_intensity_i     : in  BarIndex_intensity_array;
+        Data_Ready_i        : in std_logic;
+        
+         -- VGA output                                   
+        VGA_Red_o           : out std_logic_vector(3 downto 0);                        
+        VGA_Green_o         : out std_logic_vector(3 downto 0);                       
+        VGA_Blue_o          : out std_logic_vector(3 downto 0);                       
+        VGA_h_sync_o        : out std_logic;                       
+        VGA_v_sync_o        : out std_logic                       
+);
+END component; 
 
 signal Audio_Left_Channel_s                : std_logic_vector (15 downto 0);
 signal Audio_Right_Channel_s               : std_logic_vector (15 downto 0);
 signal Data_Ready_s                         : std_logic;
 signal Data_valid_s                         : std_logic;
+
+signal Bar_intensity_s                     : BarIndex_intensity_array;
 
 begin
 
@@ -126,6 +148,30 @@ begin
     wait;
   end process Reset_gen;
  
+ 
+ 
+-- -- time signals
+  -- process(sClock)
+  -- begin
+    -- if rising_edge(sClock) then
+      -- tReal <= tReal + 1.0/clockFrequency;
+    -- end if;
+  -- end process;
+
+  -- outReal <= outAmplitude * ( sin(2.0*math_pi*sineFrequency*tReal) + 1.0) / 2.0;
+
+  -- process(outReal)
+  -- begin
+  
+        -- X_o <= outReal*4.0;
+        -- Y_o <= outReal*2.0;
+        -- Z_o <= outReal;
+    
+  -- end process;
+  
+  
+  
+  
   
   -----------------------------------------------------------------------
   -- Generate data slave channel inputs
@@ -133,67 +179,67 @@ begin
 
   data_stimuli : process
 
-    -- Variables for random number generation
-    variable seed1, seed2 : positive;
-    variable rand         : real;
+    -- -- Variables for random number generation
+    -- variable seed1, seed2 : positive;
+    -- variable rand         : real;
 
-    -- Procedure to drive an input sample with specific data
-    -- data is the data value to drive on the tdata signal
-    -- last is the bit value to drive on the tlast signal
-    -- valid_mode defines how to drive TVALID: 0 = TVALID always high, 1 = TVALID low occasionally
-    procedure drive_sample ( data       : std_logic_vector(31 downto 0);
-                             last       : std_logic;
-                             valid_mode : integer := 0 ) is
-    begin
-      -- Audio_Left_Channel_s  <= data(11 downto 0);
-      -- Audio_Right_Channel_s  <= (others=>'0');
-      --s_axis_data_tlast  <= last;
+    -- -- Procedure to drive an input sample with specific data
+    -- -- data is the data value to drive on the tdata signal
+    -- -- last is the bit value to drive on the tlast signal
+    -- -- valid_mode defines how to drive TVALID: 0 = TVALID always high, 1 = TVALID low occasionally
+    -- procedure drive_sample ( data       : std_logic_vector(31 downto 0);
+                             -- last       : std_logic;
+                             -- valid_mode : integer := 0 ) is
+    -- begin
+      -- -- Audio_Left_Channel_s  <= data(11 downto 0);
+      -- -- Audio_Right_Channel_s  <= (others=>'0');
+      -- --s_axis_data_tlast  <= last;
 
-      if valid_mode = 1 then
-        uniform(seed1, seed2, rand);  -- generate random number
-        if rand < 0.25 then
-          Data_valid_s <= '0';
-        else
-          Data_valid_s <= '1';
-        end if;
-      else
-        Data_valid_s <= '1';
-      end if;
-      loop
-        wait until rising_edge(aclk);
-        -- exit when s_axis_data_tready = '1';
-      end loop;
-      wait for T_HOLD;
-      Data_valid_s <= '0';
-    end procedure drive_sample;
+      -- if valid_mode = 1 then
+        -- uniform(seed1, seed2, rand);  -- generate random number
+        -- if rand < 0.25 then
+          -- Data_valid_s <= '0';
+        -- else
+          -- Data_valid_s <= '1';
+        -- end if;
+      -- else
+        -- Data_valid_s <= '1';
+      -- end if;
+      -- loop
+        -- wait until rising_edge(aclk);
+        -- -- exit when s_axis_data_tready = '1';
+      -- end loop;
+      -- wait for T_HOLD;
+      -- Data_valid_s <= '0';
+    -- end procedure drive_sample;
 
     -- Procedure to drive an input frame with a table of data
     -- data is the data table containing input data
     -- valid_mode defines how to drive TVALID: 0 = TVALID always high, 1 = TVALID low occasionally
-    procedure drive_frame ( data         : T_IP_TABLE;
-                            valid_mode   : integer := 0 ) is
-      variable samples : integer;
-      variable index   : integer;
-      variable sample_data : std_logic_vector(31 downto 0);
-      variable sample_last : std_logic;
-    begin
-      samples := data'length;
-      index  := 0;
-      while index < data'length loop
-        -- Look up sample data in data table, construct TDATA value
-        sample_data(15 downto 0)  := data(index).re;                  -- real data
-        sample_data(31 downto 16) := data(index).im;                  -- imaginary data
-        -- Construct TLAST's value
-        index := index + 1;
-        if index >= data'length then
-          sample_last := '1';
-        else
-          sample_last := '0';
-        end if;
-        -- Drive the sample
-        drive_sample(sample_data, sample_last, valid_mode);
-      end loop;
-    end procedure drive_frame;
+    -- procedure drive_frame ( data         : T_IP_TABLE;
+                            -- valid_mode   : integer := 0 ) is
+      -- variable samples : integer;
+      -- variable index   : integer;
+      -- variable sample_data : std_logic_vector(31 downto 0);
+      -- variable sample_last : std_logic;
+    -- begin
+      -- samples := data'length;
+      -- index  := 0;
+      -- while index < data'length loop
+        -- -- Look up sample data in data table, construct TDATA value
+        -- sample_data(15 downto 0)  := data(index).re;                  -- real data
+        -- sample_data(31 downto 16) := data(index).im;                  -- imaginary data
+        -- -- Construct TLAST's value
+        -- index := index + 1;
+        -- if index >= data'length then
+          -- sample_last := '1';
+        -- else
+          -- sample_last := '0';
+        -- end if;
+        -- -- Drive the sample
+        -- drive_sample(sample_data, sample_last, valid_mode);
+      -- end loop;
+    -- end procedure drive_frame;
 
    -- variable op_data_saved : T_IP_TABLE;  -- to save a copy of recorded output data
 
@@ -207,15 +253,19 @@ begin
   begin
 
     -- Drive inputs T_HOLD time after rising edge of clock
-    Data_valid_s <= '1';
+   
+    Audio_Left_Channel_s  <= (others=>'0');
+    Audio_Right_Channel_s <= (others=>'0');
     wait until Reset_s ='0';
     loop 
     index  := 0;
         while index < IP_DATA'length loop
             wait until rising_edge(aclk);         
-            Audio_Left_Channel_s  <= IP_DATA(index).re;                  -- real data
-            Audio_Right_Channel_s  <= (others=>'0');
-            index := index +1;
+            if Data_valid_s='1' then
+                Audio_Left_Channel_s  <= IP_DATA(index).re;                  -- real data
+                Audio_Right_Channel_s  <= (others=>'0');
+                index := index +1;
+            end if;
         end loop;
     end loop;
 
@@ -235,6 +285,15 @@ begin
   end process data_stimuli;
 
 
+ process 
+  begin
+    Data_valid_s <= '0';
+    wait for 200 ns;
+    wait until rising_edge(aclk);
+    Data_valid_s <= '1'; 
+    wait until rising_edge(aclk);  
+    Data_valid_s <= '0'; 
+  end process;
   --===================================
 Frequency_Analysis: entity work.Frequency_Analysis_top 
   --===================================
@@ -250,9 +309,30 @@ port map(
     Audio_Right_Channel_i               => Audio_Right_Channel_s,            
     Audio_Data_Valid_i                  => Data_valid_s,            
     -- user Interface                               
-    Bar_intensity_o                     => open,            
+    Bar_intensity_o                     => Bar_intensity_s,            
     Data_Ready_o                        => Data_Ready_s           
 );
 
+
+
+--======================
+Display: Display_manager 
+--======================
+    generic map (
+        horiztonal_size    => 1280,
+        vertical_size      => 1024
+    )
+    port map (
+        Clk_i               => aclk,           
+        Reset_i             => Reset_s,             
+        Bar_intensity_i     => Bar_intensity_s, --BarIndex_intensity_dummy_C,  --          
+        Data_Ready_i        => Data_Ready_s,
+        -- VGA output                                   
+        VGA_Red_o           => open,                              
+        VGA_Green_o         => open,                             
+        VGA_Blue_o          => open,                             
+        VGA_h_sync_o        => open,            
+        VGA_v_sync_o        => open   
+    );
 
 end behevioral;

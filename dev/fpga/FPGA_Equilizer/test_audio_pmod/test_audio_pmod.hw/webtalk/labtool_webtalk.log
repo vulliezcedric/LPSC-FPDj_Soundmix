@@ -1,0 +1,12 @@
+
+****** Webtalk v2014.4 (64-bit)
+  **** SW Build 1071353 on Tue Nov 18 18:24:04 MST 2014
+  **** IP Build 1070531 on Tue Nov 18 01:10:18 MST 2014
+    ** Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
+
+source D:/MASTER/LPSC/git/LPSC-FPDj_Soundmix/vivado_prj/test_audio_pmod/test_audio_pmod.hw/webtalk/labtool_webtalk.tcl -notrace
+
+    while executing
+"webtalk_transmit -clientid 2908224268 -regid "210778326_0_0_956" -xml D:/MASTER/LPSC/git/LPSC-FPDj_Soundmix/vivado_prj/test_audio_pmod/test_audio_pmod..."
+    (file "D:/MASTER/LPSC/git/LPSC-FPDj_Soundmix/vivado_prj/test_audio_pmod/test_audio_pmod.hw/webtalk/labtool_webtalk.tcl" line 28)
+INFO: [Common 17-206] Exiting Webtalk at Mon May 18 20:12:25 2015...
