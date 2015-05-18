@@ -1,0 +1,71 @@
+-- Spec: 25 Hz to 20kHz
+-- Sample frequency: 48kHz
+-- Depth needed for min 4 samples at 20Hz: 2400*4= 9600
+
+-- Depth to take 16384 or 8192
+
+-- with FIR Depth at 16384 (2^14) and 16 bars:
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_arith.all;
+use ieee.std_logic_unsigned.all;
+library work;
+use work.Fir_index_package.all;
+
+
+
+package Package_FPDj is
+
+
+component Intensity_Bands_Extraction is
+port(
+    Clk_i                               : in std_logic;
+    Reset_i                             : in std_logic;
+    -- fft interface
+    Frame_Index_i                       : in std_logic_vector (15 downto 0);
+    Frame_start_i                       : in std_logic;
+    Frame_end_i                         : in std_logic;
+    Frame_Data_i                        : in std_logic_vector (31 downto 0);
+    Frame_Data_valid_i                  : in std_logic;
+    -- user Interface
+    Bar_intensity_o                     : out  BarIndex_intensity_array;
+    Data_Ready_o                        : out std_logic
+);
+end component;
+
+ --------------------------------------------------------------------
+ type Color_type is record    
+        Red     : std_logic_vector(3 downto 0);
+        Green   : std_logic_vector(3 downto 0);
+        Blue    : std_logic_vector(3 downto 0);
+end record;
+    
+    
+constant Color_Black : Color_type := (
+    Red     =>  x"f",
+    Green   =>  x"f",
+    Blue=   >   x"f" 
+ );
+ 
+constant Color_Red : Color_type := (
+    Red     =>  x"f",
+    Green   =>  x"0",
+    Blue=   >   x"0" 
+ );
+ 
+ constant Color_Yellow : Color_type := (
+    Red     =>  x"0",
+    Green   =>  x"f",
+    Blue=   >   x"f" 
+ );
+ 
+ constant Color_green : Color_type := (
+    Red     =>  x"0",
+    Green   =>  x"f",
+    Blue=   >   x"0" 
+ );
+ 
+ 
+ 
+ 
+end package;

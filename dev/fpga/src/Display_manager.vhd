@@ -1,0 +1,148 @@
+
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL; 
+use IEEE.NUMERIC_STD.ALL;
+use ieee.std_logic_unsigned.all;
+use work.Fir_index_package.all;
+use work.Package_FPDj.all;
+
+ENTITY Display_manager IS
+generic (
+        horiztonal_size      : INTEGER:= 800;
+        vertical_size        : INTEGER:= 600
+);
+    port (
+        Clk_i               : in std_logic;
+        Reset_i             : in std_logic;        
+        Bar_intensity_i     : in  BarIndex_intensity_array;
+        Data_Ready_i        : in std_logic;
+        
+         -- VGA output                                   
+        VGA_Red_o           : out std_logic_vector(3 downto 0);                        
+        VGA_Green_o         : out std_logic_vector(3 downto 0);                       
+        VGA_Blue_o          : out std_logic_vector(3 downto 0);                       
+        VGA_h_sync_o        : out std_logic;                       
+        VGA_v_sync_o        : out std_logic                       
+);
+END Display_manager;
+
+ARCHITECTURE behavior OF Display_manager IS
+
+ 
+ 
+ 
+ 
+ component vga_controller IS
+  GENERIC(
+    h_pulse  :  INTEGER   := 208;   --horiztonal sync pulse width in pixels
+    h_bp     :  INTEGER   := 336;   --horiztonal back porch width in pixels
+    h_pixels :  INTEGER   := 1920;  --horiztonal display width in pixels
+    h_fp     :  INTEGER   := 128;   --horiztonal front porch width in pixels
+    h_pol    :  STD_LOGIC := '0';   --horizontal sync pulse polarity (1 = positive, 0 = negative)
+    v_pulse  :  INTEGER   := 3;     --vertical sync pulse width in rows
+    v_bp     :  INTEGER   := 38;    --vertical back porch width in rows
+    v_pixels :  INTEGER   := 1200;  --vertical display width in rows
+    v_fp     :  INTEGER   := 1;     --vertical front porch width in rows
+    v_pol    :  STD_LOGIC := '1');  --vertical sync pulse polarity (1 = positive, 0 = negative)
+  PORT(
+    pixel_clk :  IN   STD_LOGIC;  --pixel clock at frequency of VGA mode being used
+    reset_n   :  IN   STD_LOGIC;  --active low asycnchronous reset
+    h_sync    :  OUT  STD_LOGIC;  --horiztonal sync pulse
+    v_sync    :  OUT  STD_LOGIC;  --vertical sync pulse
+    disp_ena  :  OUT  STD_LOGIC;  --display enable ('1' = display time, '0' = blanking time)
+    column    :  OUT  INTEGER;    --horizontal pixel coordinate
+    row       :  OUT  INTEGER;    --vertical pixel coordinate
+    n_blank   :  OUT  STD_LOGIC;  --direct blacking output to DAC
+    n_sync    :  OUT  STD_LOGIC); --sync-on-green output to DAC
+END component;
+
+ component vga_Manager IS  
+    generic (
+        horiztonal_size      : INTEGER:= 1280;
+        vertical_size        : INTEGER:= 1024
+    );
+   port(
+    Clk_i                       : in std_logic;
+    Reset_i                     : in std_logic;
+    -- user interface
+    Bar_intensity_i             : in  BarIndex_intensity_array;
+    Data_Ready_i                : in std_logic;
+    --  VGA interface
+    column_i                    : in  INTEGER;    --horizontal pixel coordinate
+    row_i                       : in  INTEGER;    --vertical pixel coordinate
+    h_sync_i                    : in std_logic;
+    v_sync_i                    : in std_logic;
+    Display_EN_i                : in std_logic;
+    -- VGA output
+    VGA_Red_o                   : out std_logic_vector (3 downto 0);
+    VGA_Green_o                 : out std_logic_vector (3 downto 0);
+    VGA_Blue_o                  : out std_logic_vector (3 downto 0);
+    VGA_h_sync_o                : out std_logic;
+    VGA_v_sync_o                : out std_logic
+);
+END component;
+
+signal nReset_s     : std_logic;
+signal column_s     : integer;
+signal row_s        : integer;
+signal h_sync_s     : std_logic;
+signal v_sync_s     : std_logic;
+signal disp_ena_s   : std_logic;
+
+BEGIN
+
+nReset_s <= not Reset_i;
+
+
+--=========================
+ VGA_output: vga_controller
+--========================= 
+  GENERIC map
+  (    
+    h_pixels    => horiztonal_size,  --horiztonal display width in pixels    
+    v_pixels    => vertical_size  --vertical display width in rows
+   )
+  PORT map(
+    pixel_clk   => Clk_i,                 --pixel clock at frequency of VGA mode being used
+    reset_n     => nReset_s,            --active low asycnchronous reset
+    h_sync      => h_sync_s,                 --horiztonal sync pulse
+    v_sync      => v_sync_s,                 --vertical sync pulse
+    disp_ena    => disp_ena_s,                 --display enable ('1' = display time, '0' = blanking time)
+    column      => column_s,                  --horizontal pixel coordinate
+    row         => row_s,                  --vertical pixel coordinate
+    n_blank     => open,                 --direct blacking output to DAC
+    n_sync      => open               --sync-on-green output to DAC
+    );
+  
+  
+  
+  --========================
+  Manager: vga_Manager
+  --========================
+    generic map (
+        horiztonal_size     => horiztonal_size,  --horiztonal display width in pixels    
+        vertical_size       => vertical_size  --vertical display width in rows
+    )
+   port map(
+    Clk_i                       => Clk_i,                    
+    Reset_i                     => Reset_i,                  
+    -- user interface                             
+    Bar_intensity_i             => Bar_intensity_i,                   
+    Data_Ready_i                => Data_Ready_i,                  
+    --  VGA interface                               
+    column_i                    => column_s,                    
+    row_i                       => row_s,                    
+    h_sync_i                    => h_sync_s,                   
+    v_sync_i                    => v_sync_s,                    
+    Display_EN_i                => disp_ena_s,                  
+    -- VGA output                                   
+    VGA_Red_o                   => VGA_Red_o,                   
+    VGA_Green_o                 => VGA_Green_o,                  
+    VGA_Blue_o                  => VGA_Blue_o,                  
+    VGA_h_sync_o                => VGA_h_sync_o,                  
+    VGA_v_sync_o                => VGA_v_sync_o                   
+);
+
+  
+  
+END behavior;

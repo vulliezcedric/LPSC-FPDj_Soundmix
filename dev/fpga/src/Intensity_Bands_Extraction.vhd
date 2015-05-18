@@ -24,13 +24,13 @@ end Intensity_Bands_Extraction;
 
 architecture behevioral of Intensity_Bands_Extraction is
 
-type state_machine is (IDLE, Intensity_Acc);
+type state_machine is (IDLE, Intensity_Acc,Wait_end_of_frame);
 signal State: state_machine;
 
 signal Intensity_Threshold_s                : std_logic_vector (15 downto 0);    
 signal Intensity_accumulator_s              : std_logic_vector(34 downto 0); -- must be high enough not to have an overflow
 signal Bar_intensity_s                      : BarIndex_intensity_array;
-signal BarCounter_s                         : std_logic_vector (3 downto 0);
+signal BarCounter_s                         : std_logic_vector (5 downto 0);
 begin
 
 
@@ -65,21 +65,31 @@ begin
                 -- only increment if the data is valid
                 if Frame_Data_valid_i='1' then                   
                     
-                    if Frame_Index_i = Intensity_Threshold_s then
-                        Bar_intensity_s (conv_integer (BarCounter_s)) <= Intensity_accumulator_s + Frame_Data_i;    -- Saves the Accumulator
+                    if Frame_Index_i = Intensity_Threshold_s  then
+                        Bar_intensity_s (conv_integer (BarCounter_s)) <= Intensity_accumulator_s + Frame_Data_i(31 downto 10);    -- Saves the Accumulator high part
                         Intensity_accumulator_s <= (others=>'0');                                                   -- Resets the Accumulator
                         Intensity_Threshold_s   <= FIR_Index_to_Bar(conv_integer (BarCounter_s+1));                 -- loads the next ThresHold
                         BarCounter_s            <= BarCounter_s +1;                                                 -- increment the Array Index                   
                     else
-                        Intensity_accumulator_s <= Intensity_accumulator_s + Frame_Data_i;                          -- Increment the Accumulator
+                        if Frame_Index_i> x"0003" then -- don't record the 3 lower frequencies
+                            Intensity_accumulator_s <= Intensity_accumulator_s + Frame_Data_i(31 downto 10);                          -- Increment the Accumulator
+                        end if;
                     end if;
                 end if;
                 
                 if BarCounter_s=Nbbars_C then
-                    State           <= IDLE;
+                    State           <= Wait_end_of_frame;
                     Bar_intensity_o <= Bar_intensity_s;
                     Data_Ready_o    <='1';
                 end if;
+            when Wait_end_of_frame =>
+                if Frame_end_i ='1' then
+                    Intensity_accumulator_s <= (others=>'0');
+                    BarCounter_s            <= (others=>'0');
+                    Intensity_Threshold_s   <= FIR_Index_to_Bar(0);
+                    State                   <= intensity_Acc; 
+                end if;
+             
             when others =>
                 State <= IDLE;
         end case;

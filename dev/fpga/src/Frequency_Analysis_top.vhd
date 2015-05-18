@@ -30,6 +30,7 @@ architecture behevioral of Frequency_Analysis_top is
 component xfft_0 IS
   PORT (
     aclk : IN STD_LOGIC;
+    aclken : IN STD_LOGIC;
     s_axis_config_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
     s_axis_config_tvalid : IN STD_LOGIC;
     s_axis_config_tready : OUT STD_LOGIC;
@@ -48,8 +49,25 @@ component xfft_0 IS
   );
 END component;
 
+component FFT_Manager is
+generic (
+        FFT_depth: integer:= 8192
+    );
+port(
+    Clk_i                               : in std_logic;
+    Reset_i                             : in std_logic;
+    -- FFT interface
+    FFT_DataReady_i                     : in std_logic;
+    FFT_DataValid_o                     : out std_logic;
+    FFT_DataLast_o                      : out std_logic;
+    FFT_Frame_start_i                   : in std_logic;
+    -- Audio interface   
+    Audio_Data_Valid_i                  : in std_logic   
+);
+end component;
 
- component mult_gen_0 IS
+
+ component mult_gen_1 IS
   PORT (
     CLK : IN STD_LOGIC;
     A : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
@@ -69,7 +87,10 @@ signal FFT_data_valid_s         : std_logic;
 signal FFT_data_Last_s          : std_logic;
 signal FFT_Frame_started_s      : std_logic;
 signal FFT_input_Data_s         : std_logic_vector (31 downto 0);
-
+signal FFT_data_tlast_s         : std_logic;
+signal FFT_data_ready_s         : std_logic;
+signal FFT_audio_Valid_s        : std_logic;
+    
 signal FFT_Real_s               : std_logic_vector (15 downto 0);
 signal FFT_Im_s                 : std_logic_vector (15 downto 0);
 
@@ -77,7 +98,7 @@ signal FFT_Im_s                 : std_logic_vector (15 downto 0);
 signal Imsquare_s               : std_logic_vector (31 downto 0);
 signal Realsquare_s             : std_logic_vector (31 downto 0);
 signal FFT_Result_s             : std_logic_vector (31 downto 0);
-constant Multlatency_C          : integer:= 4;
+constant Multlatency_C          : integer:= 4; -- 3+1
 
 Type latencyRecord is record
     frame_started       : STD_LOGIC;
@@ -88,6 +109,14 @@ end record;
 
 type latencyPipe is array (0 to Multlatency_C-1) of latencyRecord;
 signal Mult_latency_pipe: latencyPipe;
+signal Bar_intensity_s                      : BarIndex_intensity_array;   
+signal Data_Ready_s                         : std_logic;
+
+
+-- constant BarIntensity_PipeLength: integer:= 3;
+-- type Bar_intensity_array is array (0 to BarIntensity_PipeLength-1) of BarIndex_intensity_array;
+-- signal Bar_intensity_pipe : Bar_intensity_array;
+-- signal Bar_intensity_counter_s: std_logic_vector (1 downto 0);
 
 begin
 
@@ -100,18 +129,38 @@ FFT_Real_s  <= FFT_Output_s(15 downto 0);
 FFT_Im_s    <= FFT_Output_s(31 downto 16);
 
 
+--=========================
+FFT_controler: FFT_Manager 
+--=========================
+generic map (
+        FFT_depth => 8190 --8192 -1
+    )
+port map(
+    Clk_i                   => Clk_i,       
+    Reset_i                 => Reset_i,     
+    -- FFT interface            
+    FFT_DataReady_i         => FFT_data_ready_s,      
+    FFT_DataValid_o         => FFT_audio_Valid_s,     
+    FFT_DataLast_o          => FFT_data_tlast_s,  
+    FFT_Frame_start_i       => FFT_Frame_started_s,
+    -- Audio interface          
+    Audio_Data_Valid_i      => Audio_Data_Valid_i     
+);
+
+
 --=================
 FFT_Block: xfft_0 
 --=================
   PORT  MAP(
-    aclk                        => Clk_i,                        
+    aclk                        => Clk_i,     
+    aclken                      => FFT_audio_Valid_s, --'1', 
     s_axis_config_tdata         => FFT_config_tdata_C,                        
-    s_axis_config_tvalid        => '1',                       
+    s_axis_config_tvalid        => '1',                    
     s_axis_config_tready        => open,                         
     s_axis_data_tdata           => FFT_input_Data_s,                       
-    s_axis_data_tvalid          => Audio_Data_Valid_i,                        
-    s_axis_data_tready          => open,                        
-    s_axis_data_tlast           => '0',                        
+    s_axis_data_tvalid          => '1' ,                      
+    s_axis_data_tready          => FFT_data_ready_s,                        
+    s_axis_data_tlast           => FFT_data_tlast_s,                        
     m_axis_data_tdata           => FFT_Output_s,                        
     m_axis_data_tuser           => FFT_Output_Index_s,                         
     m_axis_data_tvalid          => FFT_data_valid_s,                        
@@ -123,8 +172,12 @@ FFT_Block: xfft_0
   );
 
   
+  
+  
+  
+  
 --=====================  
- Mult_real :mult_gen_0 
+ Mult_real :mult_gen_1 
  --=====================
   PORT map(
     CLK     => Clk_i,                
@@ -133,7 +186,7 @@ FFT_Block: xfft_0
     P       => Realsquare_s                
   );
  --=====================
-  Mult_im :mult_gen_0
+  Mult_im :mult_gen_1
  --=====================  
   PORT map(
     CLK     => Clk_i,                
@@ -185,11 +238,54 @@ port map (
     Frame_Data_valid_i                  => Mult_latency_pipe(Multlatency_C-1).data_tvalid, 
     Frame_Data_i                        => FFT_Result_s,    
     -- user Interface                                      
-    Bar_intensity_o                     => open,                    
+    Bar_intensity_o                     => Bar_intensity_o, --Bar_intensity_s,                    
     Data_Ready_o                        => Data_Ready_o                    
 );
+-- --========================================
+-- intensity_formating:Intensity_Bands_Format 
+-- --========================================
+-- port map(
+    -- Clk_i                               => Clk_i,               
+    -- Reset_i                             => Reset_i,             
+    -- Bar_intensity_i                     => Bar_intensity_s,     
+    -- Data_Ready_i                        => Data_Ready_s,        
+    -- Bar_intensity_o                     => open,     
+    -- Data_Ready_o                        => Data_Ready_o         
+-- );
 
 
+
+
+-- -- average the Bar intensity through time
+-- process ( Clk_i, Reset_i)
+-- begin
+    -- if Reset_i='1' then
+        -- for i in 0 to BarIntensity_PipeLength-1 loop            
+            -- Bar_intensity_pipe (i) <= BarIndex_intensity_Reset_c;
+        -- end loop;
+        -- Data_Ready_o <='0';
+        -- Bar_intensity_o <=BarIndex_intensity_Reset_c;
+        -- Bar_intensity_counter_s <= (others=>'0');
+    -- elsif rising_edge(Clk_i) then
+        -- if Data_Ready_s='1' then
+            -- Bar_intensity_pipe (0) <= Bar_intensity_s;            
+            -- for i in 1 to BarIntensity_PipeLength-1 loop            
+                -- for j in 0 to Nbbars_C-1 loop
+                    -- Bar_intensity_pipe (i)(j) <=  Bar_intensity_pipe (i-1)(j) +Bar_intensity_s(j) ;
+                -- end loop;              
+            -- end loop;
+            
+            -- if Bar_intensity_counter_s ="11" then
+                -- Bar_intensity_o <=Bar_intensity_pipe(BarIntensity_PipeLength-1);
+                -- Bar_intensity_counter_s <= (others=>'0');
+            -- else
+                -- Bar_intensity_counter_s <=Bar_intensity_counter_s+1;
+            -- end if;   
+            
+        -- end if;
+        
+    -- end if;
+-- end process;
 
 
 end behevioral;

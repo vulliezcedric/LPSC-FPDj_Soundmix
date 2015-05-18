@@ -1,0 +1,248 @@
+
+
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL; 
+use IEEE.NUMERIC_STD.ALL;
+use ieee.std_logic_unsigned.all;
+use work.Fir_index_package.all;
+use work.Package_FPDj.all;
+-- to do, need to keep the bar enable for the rest of the image when detected
+
+ENTITY vga_Manager IS  
+    generic (
+        horiztonal_size      : INTEGER:= 1280;
+        vertical_size        : INTEGER:= 1024
+    );
+   port(
+    Clk_i                       : in std_logic;
+    Reset_i                     : in std_logic;
+    -- user interface
+    Bar_intensity_i             : in  BarIndex_intensity_array;
+    Data_Ready_i                : in std_logic;
+    --  VGA interface
+    column_i                    : in  INTEGER;    --horizontal pixel coordinate
+    row_i                       : in  INTEGER;    --vertical pixel coordinate
+    h_sync_i                    : in std_logic;
+    v_sync_i                    : in std_logic;
+    Display_EN_i                : in std_logic;
+    -- VGA output
+    VGA_Red_o                   : out std_logic_vector (3 downto 0);
+    VGA_Green_o                 : out std_logic_vector (3 downto 0);
+    VGA_Blue_o                  : out std_logic_vector (3 downto 0);
+    VGA_h_sync_o                : out std_logic;
+    VGA_v_sync_o                : out std_logic
+);
+END vga_Manager;
+
+ARCHITECTURE behavior OF vga_Manager IS
+ 
+ 
+  
+-- cut the horizontal pixels into the number of bars wanted 
+constant Bars_Horizontal_length : integer:= horiztonal_size/Nbbars_C;
+constant Bars_Horizontal_gap : integer:= 10; -- in pixels
+-- takes half the screen and put 30 bars
+
+constant Bars_Starting_Row : integer:= vertical_size/2;
+constant Bars_vertical_length : integer:= Bars_Starting_Row/30;
+constant Bars_vertical_gap : integer:= 5; -- in pixels
+
+-- for simulation
+-- constant Bars_Starting_Row : integer:= 5; -- for simulation
+-- constant Bars_vertical_length : integer:= 5;
+-- constant Bars_vertical_gap : integer:= 2; -- in pixels
+ 
+ 
+signal Next_active_color_Red                : std_logic_vector (3 downto 0);
+signal Next_active_color_Green              : std_logic_vector (3 downto 0);
+signal Next_active_color_Blue               : std_logic_vector (3 downto 0);
+signal active_color_Red                     : std_logic_vector (3 downto 0);
+signal active_color_Green                   : std_logic_vector (3 downto 0);
+signal active_color_Blue                    : std_logic_vector (3 downto 0);
+    
+signal Bar_display_enable                   : std_logic;
+
+signal Bar_horizontal_counter_s             : std_logic_vector (7 downto 0);
+signal Bar_vertical_counter_s               : std_logic_vector (7 downto 0);
+signal Bar_selector_vertical_counter_s      : std_logic_vector (7 downto 0);
+signal Bar_selector_horizontal_counter_s    : std_logic_vector (7 downto 0);    
+ 
+signal hsync_delay_s                        : std_logic;
+signal hsync_rising_edge_s                  : std_logic;         
+     
+type state_machine is (idle, display_bar); 
+signal state: state_machine;
+signal colorincrement_enable : std_logic;
+
+signal bar_vector_enable : std_logic_vector (Nbbars_C-1 downto 0);
+
+
+type ColorStateMachine is (Red_to_yellow, yellow_to_green, Wait_end_frame);
+signal colorState : ColorStateMachine;
+ 
+BEGIN
+colorincrement_enable
+
+Next_active_color_Red    <=  active_color_Red -1 when colorincrement_enable  else x"f";
+Next_active_color_Green  <= x"0" + Bar_selector_horizontal_counter_s(3 downto 0) when active_color_Red=x"f" else x"f";
+Next_active_color_Blue   <= x"0";
+
+
+VGA_Red_o       <= active_color_Red     when Bar_display_enable ='1' else (others=>'0');
+VGA_Green_o     <= active_color_Green   when Bar_display_enable ='1' else (others=>'0');
+VGA_Blue_o      <= active_color_Blue    when Bar_display_enable ='1' else (others=>'0');
+
+VGA_h_sync_o    <= h_sync_i; 
+VGA_v_sync_o    <= v_sync_i;            
+
+
+process( Clk_i , Reset_i) 
+begin
+    if Reset_i='1' then
+        active_color_Green  <= x"0";
+        active_color_Red    <= x"f";
+        active_color_Blue   <= x"0";
+    elsif rising_edge (Clk_i) then
+        case colorState is
+        
+            when Red_to_yellow =>
+            
+                if colorincrement_enable ='1' then
+                    active_color_Green <= active_color_Green +1;
+                    active_color_Red    <= active_color_Red;
+                    active_color_Blue   <= active_color_Blue;
+                    if active_color_Green=x"f" then
+                        active_color_Green <= x"f";
+                        active_color_Red    <= active_color_Red-1;
+                        active_color_Blue   <= active_color_Blue;
+                        colorState <= yellow_to_green;
+                    end if;                
+                end if;    
+            when yellow_to_green =>
+                if colorincrement_enable ='1' then
+                    active_color_Green <= active_color_Green;
+                    active_color_Red    <= active_color_Red-1;
+                    active_color_Blue   <= active_color_Blue;
+                    if active_color_Red=x"0" then
+                        active_color_Green <= x"f";
+                        active_color_Red    <= active_color_Red;
+                        active_color_Blue   <= active_color_Blue;
+                        colorState <= Wait_end_frame;
+                    end if;
+                end if;
+            when Wait_end_frame =>        
+                if v_sync_i='1' then
+                    colorState <= Red_to_yellow;  
+                    active_color_Green  <= x"0";
+                    active_color_Red    <= x"f";
+                    active_color_Blue   <= x"0";
+                end if;
+            when others=>
+                colorState <= Red_to_yellow;  
+                active_color_Green  <= x"0";
+                active_color_Red    <= x"f";
+                active_color_Blue   <= x"0";    
+
+        end case;         
+                    
+    end if;
+end process;
+
+process( Clk_i , Reset_i) 
+begin
+    if Reset_i='1' then
+        hsync_delay_s   <='0';
+        hsync_rising_edge_s      <='0';
+    elsif rising_edge (Clk_i) then
+        hsync_delay_s <= h_sync_i;
+        if h_sync_i='1' and hsync_delay_s='0' then
+          hsync_rising_edge_s        <='1';
+        else
+            hsync_rising_edge_s      <='0';
+        end if;
+        
+    end if;
+end process;
+
+
+
+
+
+
+process( Clk_i , Reset_i) 
+begin
+    if Reset_i='1' then      
+    
+        Bar_horizontal_counter_s            <= (others=>'0');
+        Bar_vertical_counter_s              <= (others=>'0');
+        Bar_selector_vertical_counter_s     <= (others=>'0');
+        Bar_selector_horizontal_counter_s   <= (others=>'0');
+        Bar_display_enable                  <='0';
+        bar_vector_enable                   <= (others=>'0');   
+        colorincrement_enable              <='0';        
+    elsif rising_edge (Clk_i) then    
+        colorincrement_enable <='0';    
+        case state is       
+            when idle =>
+                -- waits to be at a starting row before beginning
+                if row_i=Bars_Starting_Row then
+                    state                           <= display_bar;
+                    Bar_horizontal_counter_s        <= (others=>'0');
+                    Bar_selector_horizontal_counter_s   <= (others=>'0');
+                    Bar_vertical_counter_s              <= (others=>'0');
+                    bar_vector_enable                   <= (others=>'0');    
+                end if;
+            when display_bar =>
+                if Display_EN_i='1' then
+                    
+                    Bar_horizontal_counter_s <= Bar_horizontal_counter_s+1; -- increment the column sub-counter
+                    
+                    
+                    if Bar_horizontal_counter_s <=  (Bars_Horizontal_length -Bars_Horizontal_gap) then -- in the bar
+                        -- the bar needs to be displayed
+                        if Bar_intensity_i(conv_integer(Bar_selector_vertical_counter_s))(29-conv_integer(Bar_selector_horizontal_counter_s))='1' or bar_vector_enable(conv_integer(Bar_selector_vertical_counter_s))='1' then -- enough intensity                        
+                            Bar_display_enable <='1'; 
+                            bar_vector_enable(conv_integer(Bar_selector_vertical_counter_s)) <= '1';
+                        else
+                            Bar_display_enable <='0'; 
+                        end if;
+                    
+                    else   -- in the gap
+                        Bar_display_enable <='0'; 
+                        if Bar_horizontal_counter_s = Bars_Horizontal_length-1 then -- at the limit of the current bar, we pass on the next
+                            Bar_selector_vertical_counter_s     <= Bar_selector_vertical_counter_s+1;
+                            Bar_horizontal_counter_s            <= (others=>'0');  
+                        end if;
+                        
+                    end if;
+                else
+                    Bar_horizontal_counter_s            <= (others=>'0');
+                    --Bar_vertical_counter_s              <= (others=>'0');
+                end if;
+                
+                -- passing in another row
+                if hsync_rising_edge_s ='1' then   
+                    Bar_selector_vertical_counter_s    <= (others=>'0');               
+                    Bar_vertical_counter_s <= Bar_vertical_counter_s+1;
+                    if Bar_vertical_counter_s = Bars_vertical_length then
+                        Bar_display_enable      <='0'; 
+                        Bar_vertical_counter_s  <= (others=>'0');
+                        Bar_selector_horizontal_counter_s <= Bar_selector_horizontal_counter_s +1; 
+                        colorincrement_enable <='1';
+                    end if;   
+                end if;
+                if  Bar_vertical_counter_s >= (Bars_vertical_length - Bars_vertical_gap) then
+                        Bar_display_enable <='0'; 
+                end if;
+                if v_sync_i='1' then
+                    state   <= idle;
+                end if;
+            when others=>
+                state   <= idle;
+        end case;
+    end if;
+end process;
+
+
+
+END behavior;
