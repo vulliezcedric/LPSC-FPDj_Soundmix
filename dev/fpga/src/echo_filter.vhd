@@ -78,8 +78,8 @@ Process (Clk_i, Reset_i)
         if Reset_i ='1' then
             feedback_sound_s <= (others => '0');
         elsif rising_edge(Clk_i) then
-            feedback_sound_s<= Audio_i + ('0' & FIFO_Data_out_s(10 downto 0)); -- 0.25* FIFO_Data_out_s
-            Audio_o <=  "0000" & Audio_i + ("00000" & FIFO_Data_out_s(10 downto 0));
+            --feedback_sound_s<= Audio_i + (FIFO_Data_out_s(10) & FIFO_Data_out_s(10 downto 0)); -- 0.25* FIFO_Data_out_s
+            --Audio_o <=  Audio_i(Audio_i'high) & Audio_i(Audio_i'high) & Audio_i(Audio_i'high) & Audio_i(Audio_i'high)  & Audio_i + ("00000" & FIFO_Data_out_s(10 downto 0));
         end if;      
     end process;
   

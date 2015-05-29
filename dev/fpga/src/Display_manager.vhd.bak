@@ -80,7 +80,6 @@ END component;
     Scope_enable_o              : out STD_LOGIC_VECTOR(0 DOWNTO 0);           
     Scope_Add_o                 : out STD_LOGIC_VECTOR(10 DOWNTO 0);            
     Scope_input_i               : in STD_LOGIC_VECTOR(30 DOWNTO 0);                                                    
-    Scope_first_Row_o           : out std_logic;
     -- VGA output
     VGA_Red_o                   : out std_logic_vector (3 downto 0);
     VGA_Green_o                 : out std_logic_vector (3 downto 0);
@@ -104,7 +103,7 @@ signal ReadENb_s        :  STD_LOGIC_VECTOR(0 DOWNTO 0);
 signal addrb_s      :  STD_LOGIC_VECTOR(10 DOWNTO 0);
 signal dinb_s       :  STD_LOGIC_VECTOR(30 DOWNTO 0);
 signal doutb_s      :  STD_LOGIC_VECTOR(30 DOWNTO 0);
-signal first_Row_s  : std_logic;
+
 
 BEGIN
 
@@ -156,7 +155,6 @@ dinb_s <= (others=>'0');
     Scope_enable_o              => ReadENb_s,   
     Scope_Add_o                 => addrb_s, 
     Scope_input_i               => doutb_s,
-    Scope_first_Row_o           => first_Row_s,
     -- VGA output                                   
     VGA_Red_o                   => VGA_Red_o,                   
     VGA_Green_o                 => VGA_Green_o,                  
@@ -177,11 +175,10 @@ dinb_s <= (others=>'0');
         Reset_i                            => Reset_i,                
         Audio_i                            => Audio_i,                
         Audio_Valid_i                      => Audio_Valid_i,          
-        first_Row_i                        => first_Row_s,
         --BRAM Read interface                              
         clkb_i                             => Clk_i,                
         enb_i                              => ReadENb_s(0),               
-        web_i                              => ReadENb_s,               
+        web_i                              => '0',               
         addrb_i                            => addrb_s,             
         dinb_i                             => dinb_s ,             
         doutb_o                            => doutb_s              

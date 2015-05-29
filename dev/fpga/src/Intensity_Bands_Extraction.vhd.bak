@@ -65,17 +65,13 @@ begin
                 -- only increment if the data is valid
                 if Frame_Data_valid_i='1' then                   
                     
-                    if Frame_Index_i = Intensity_Threshold_s  then
-                        if BarCounter_s<Nbbars_C -1 then 
-                         Intensity_Threshold_s   <= FIR_Index_to_Bar(conv_integer (BarCounter_s+1));                 -- loads the next ThresHold
+                    if Frame_Index_i = Intensity_Threshold_s and BarCounter_s<=Nbbars_C-1 then
+                        Bar_intensity_s (conv_integer (BarCounter_s)) <= Intensity_accumulator_s + Frame_Data_i(31 downto 10);    -- Saves the Accumulator high part
+                        Intensity_accumulator_s <= (others=>'0');                                                   -- Resets the Accumulator
+                        if BarCounter_s=/Nbbars_C-1 then -- avoids going over the bar counter
+                            Intensity_Threshold_s   <= FIR_Index_to_Bar(conv_integer (BarCounter_s+1));                 -- loads the next ThresHold
+                            BarCounter_s            <= BarCounter_s +1;                                                 -- increment the Array Index                   
                         end if;
-                        
-                        if BarCounter_s<=Nbbars_C -1 then
-                            Bar_intensity_s (conv_integer (BarCounter_s)) <= Intensity_accumulator_s + Frame_Data_i(31 downto 10);    -- Saves the Accumulator high part
-                            Intensity_accumulator_s <= (others=>'0');                                                 -- Resets the Accumulator                                             
-                            BarCounter_s            <= BarCounter_s +1;                                                -- increment the Array Index                                          
-                        end if;
-                        
                     else
                         if Frame_Index_i> x"0003" then -- don't record the 3 lower frequencies
                             Intensity_accumulator_s <= Intensity_accumulator_s + Frame_Data_i(31 downto 10);                          -- Increment the Accumulator
