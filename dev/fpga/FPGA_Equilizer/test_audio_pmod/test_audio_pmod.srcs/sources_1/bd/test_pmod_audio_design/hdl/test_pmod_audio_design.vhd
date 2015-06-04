@@ -1,7 +1,7 @@
 --Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2014.4 (win64) Build 1071353 Tue Nov 18 18:24:04 MST 2014
---Date        : Fri May 15 00:47:21 2015
+--Date        : Fri May 22 19:56:01 2015
 --Host        : RagingZen-PC running 64-bit Service Pack 1  (build 7601)
 --Command     : generate_target test_pmod_audio_design.bd
 --Design      : test_pmod_audio_design

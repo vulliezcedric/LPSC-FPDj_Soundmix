@@ -2,106 +2,47 @@ LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL; 
 use IEEE.NUMERIC_STD.ALL;
 use ieee.std_logic_unsigned.all;
-use work.Fir_index_package.all;
-use work.Package_FPDj.all;
+--use work.Fir_index_package.all;
+--use work.Package_FPDj.all;
 -- to do, need to keep the bar enable for the rest of the image when detected
 
 ENTITY Menu IS  
-    generic (
-        horiztonal_size      : INTEGER:= 1280;
-        vertical_size        : INTEGER:= 1024
-    );
+    
    port(
-    Clk_i                   : in std_logic;
-    Reset_i                 : in std_logic;
-    -- FPGA inputs
-    BTN_i                   : in std_logic_vector (4 downto 0);
-    SW_i                    : in  std_logic_vector (15 downto 0);
-   
-    -- fpga outputs
-    LED                     : out std_logic_vector(15 downto 0);    
-    SSEG_CA 		        : out  STD_LOGIC_VECTOR (7 downto 0);
-    SSEG_AN 		        : out  STD_LOGIC_VECTOR (7 downto 0);
+    Clk_i                       : in std_logic;
+    Reset_i                     : in std_logic;
+    -- FPGA inputs  
+    BTN_i                       : in std_logic_vector (4 downto 0);
+    SW_i                        : in  std_logic_vector (15 downto 0);
+    
+    -- fpga outputs 
+    LED_o                       : out std_logic_vector(15 downto 0);    
+    SSEG_CA_o 		            : out  STD_LOGIC_VECTOR (7 downto 0);
+    SSEG_AN_o		            : out  STD_LOGIC_VECTOR (7 downto 0);
     
     -- user interface
-    enable_sound_o          : out std_logic;
+    enable_sound_o              : out std_logic;
+    volume_o                    : out  STD_LOGIC_VECTOR (7 downto 0);    
+    Filter_Echo_EN_o            : out std_logic;
+    Filter_Echo_delay_o         : out  STD_LOGIC_VECTOR (15 downto 0); 
+    Filter_1_Addaptive_EN_o     : out std_logic;
+    Filter_2_Addaptive_EN_o     : out std_logic;
+    -- display                   
+    Display_Title_EN_o          : out std_logic;
+    Display_Scope_EN_o          : out std_logic;
+    Display_Bars_EN_o           : out std_logic
 );
 END Menu;
 
 ARCHITECTURE behavior OF Menu IS
  
-  signal BTN_debounce_s     : std_logic_vector (4 downto 0);
+  signal BTN_debounce_s         : std_logic_vector (4 downto 0);
   signal BTN_debounce_delay_s : std_logic_vector (4 downto 0);
   signal BTN_Rising_edge_s : std_logic_vector (4 downto 0);
   
-  
-  type sub_menu is (Demarrage, menu_0, menu_0_1, menu_1, menu_2);
-  signal active_menu :sub_menu;  
-  
-  -- registers
- -- affichage 7 segments
- signal Demarrage_Display_title_s   : std_logic; 
- -- actions
- signal enable_sound_s       : std_logic;
- 
- 
- 
- 
- 
- 
-  
-  begin
-  -- outputs
-  enable_sound_o <=enable_sound_s;
-  
-  
-  
-  
-  
-  active_menu <= menu_0_1 when (SW_i(15)='1'and  SW_i(14)='1') else  
-                 menu_0 when SW_i(15)='1' else                
-                 menu_1 when SW_i(14)='1' else
-                 Demarrage ;
-  
-  
-
-     
-process( Clk_i , Reset_i) 
-begin
-    if Reset_i='1' then
-        Demarrage_Display_title_s  <= '0';
-        menu_0_enable_sound_s      <= '0';  
-    elsif rising_edge (Clk_i) then       
-        Demarrage_Display_title_s <='0';
-         enable_sound_s      <= '1';
-        if active_menu=Demarrage then
-            Demarrage_Display_title_s   <='1';
-            enable_sound_s              <= '0';
-        elsif active_menu=menu_0 then
-            enable_sound_s      <= '1';        
-        end if;  
-     
-    end if;
-    
-    
-end process;
-  
-  
-  
-  
-  with affichage_s select
-	SSEG_CA <=    "11000000" when "0000", -- 0
-				  "11111001" when "0001", -- 1
-				  "10100100" when "0010",  --2
-				  "10110000" when "0011",  --3
-				  "10011001" when "0100",  --4
-				  "10010010" when "0101",  --5
-				  "10000010" when "0110",  --6
-				  "11111000" when "0111",  --7
-				  "10000000" when "1000",  --8
-				  "10010000" when "1001",  --9
-				  "11111111" when others;
-
+  signal compteur_7seg  : std_logic_vector (31 downto 0);
+  signal next_7seg  	  : std_logic;
+  signal SSEG_AN_s 		        : STD_LOGIC_VECTOR (7 downto 0);
   
   
   constant seg_0_s : std_logic_vector (7 downto 0):= "11000000"; -- 0
@@ -114,12 +55,204 @@ end process;
   constant seg_7_s : std_logic_vector (7 downto 0):= "11111000";  --7
   constant seg_8_s : std_logic_vector (7 downto 0):= "10000000";  --8
   constant seg_9_s : std_logic_vector (7 downto 0):= "10010000";  --9
+  constant seg_A_s : std_logic_vector (7 downto 0):= "10001000"; -- A
+  constant seg_C_s : std_logic_vector (7 downto 0):= "11000110"; -- C
+  constant seg_D_s : std_logic_vector (7 downto 0):= "10100001"; -- D
+  constant seg_E_s : std_logic_vector (7 downto 0):= "10000110"; -- F
+  constant seg_F_s : std_logic_vector (7 downto 0):= "10001110"; -- F
+  constant seg_H_s : std_logic_vector (7 downto 0):= "10001001"; -- H
+  constant seg_J_s : std_logic_vector (7 downto 0):= "11110001";  --J
+  constant seg_L_s : std_logic_vector (7 downto 0):= "11000111"; -- L
+  constant seg_N_s : std_logic_vector (7 downto 0):= "11001000";  --N
+  constant seg_O_s : std_logic_vector (7 downto 0):= "11000000"; -- O
+  constant seg_P_s : std_logic_vector (7 downto 0):= "10001100";  --P
+  constant seg_S_s : std_logic_vector (7 downto 0):= "10010010";  --S
+  constant seg_V_s : std_logic_vector (7 downto 0):= "11000001";  --V
+  constant seg_null_s : std_logic_vector (7 downto 0):= "11111111";  -- rien
   
-   
+  signal Text_7seg : std_logic_vector ((8*8)-1 downto 0);
+  
+  type sub_menu is (Demarrage, menu_0, menu_0_1, menu_1, menu_1_1, menu_2);
+  signal active_menu :sub_menu;  
+  
+  -- registers
+ -- affichage 7 segments
+ signal Demarrage_Display_title_s   : std_logic; 
+ -- actions
+ signal enable_sound_s         : std_logic;
+ signal menu_0_enable_sound_s  :std_logic;
+ --volume
+ signal  volume_amp_s: STD_LOGIC_VECTOR (7 downto 0);
+ signal  volume_digits: STD_LOGIC_VECTOR (7 downto 0);
+ 
+ -- filtre
+ signal Filter_Echo_EN_s    : std_logic; 
+ signal echo_delay          : std_logic_vector(15 downto 0);
+ signal echo_delay_reg      : std_logic_vector(15 downto 0);
+ signal next_echo_delay_reg : std_logic_vector(15 downto 0);
+ 
+ 
+ 
+component debouncer is
+    Generic ( DEBNC_CLOCKS : INTEGER range 2 to (INTEGER'high) := 2**16;
+              PORT_WIDTH : INTEGER range 1 to (INTEGER'high) := 5);
+    Port ( SIGNAL_I : in  STD_LOGIC_VECTOR ((PORT_WIDTH - 1) downto 0);
+           CLK_I : in  STD_LOGIC;
+           SIGNAL_O : out  STD_LOGIC_VECTOR ((PORT_WIDTH - 1) downto 0));
+end component;
+
+
+
+
+begin
+
+-- outputs
+enable_sound_o          <=enable_sound_s; 
+SSEG_AN_o               <= SSEG_AN_s;
+volume_o                <= volume_amp_s;
+
+-- display
+Display_Title_EN_o      <= '1';
+Display_Scope_EN_o      <= '1';
+Display_Bars_EN_o       <= '1';
+
+ -- filter
+Filter_Echo_EN_o            <= Filter_Echo_EN_s;
+Filter_1_Addaptive_EN_o     <= '1';
+Filter_2_Addaptive_EN_o     <= '1';
+Filter_Echo_delay_o         <= echo_delay_reg;
+-------------------------------------------------  
   
   
+active_menu <=  menu_0_1   when (SW_i(15)='1'and  SW_i(14)='1') else  
+                menu_0     when SW_i(15)='1' else                
+                menu_1_1   when SW_i(14)='1' and SW_i(13)='1' else
+                menu_1     when SW_i(14)='1' else
+				menu_2     when SW_i(13)='1' else
+                Demarrage ;
+  
+     
+process( Clk_i , Reset_i) 
+begin
+    if Reset_i='1' then
+        Demarrage_Display_title_s  <= '0';
+        menu_0_enable_sound_s      <= '0'; 
+        Text_7seg <= (others=>'1');    
+        Filter_Echo_EN_s    <='0';     
+    elsif rising_edge (Clk_i) then       
+        Demarrage_Display_title_s <='0';
+        enable_sound_s      <= '1';
+        Text_7seg <= (others=>'1');
+        Filter_Echo_EN_s <='0';
+        if active_menu=Demarrage then
+            Demarrage_Display_title_s   <='1';
+            Text_7seg <= seg_F_s & seg_P_s & seg_D_s & seg_J_s & seg_null_s & seg_S_s & seg_D_s &seg_null_s;
+            enable_sound_s              <= '0';
+             LED_o <= (others=>'1');
+        elsif active_menu=menu_0 then
+            enable_sound_s      <= '1';  
+			Text_7seg <= seg_O_s & seg_P_s & seg_null_s & seg_0_s & seg_null_s & seg_S_s & seg_0_s &seg_N_s;
+			 LED_o <= SW_i;
+		elsif active_menu=menu_1 then
+            enable_sound_s      <= '1';  
+			Text_7seg <= seg_O_s & seg_P_s & seg_null_s & seg_1_s & seg_E_s & seg_C_s & seg_H_s &seg_O_s;
+            Filter_Echo_EN_s <= '1';
+			LED_o <= SW_i;
+        elsif active_menu=menu_1_1 then
+            enable_sound_s      <= '1';  
+			Text_7seg <=   seg_E_s & seg_C_s & seg_H_s &seg_O_s & seg_null_s & seg_D_s & echo_delay; -- echo on 16bits
+            
+            Filter_Echo_EN_s <= '1';
+			LED_o <= SW_i;
+                 
+             
+		elsif active_menu=menu_2 then
+            enable_sound_s      <= '1';  
+			Text_7seg <= seg_V_s & seg_O_s & seg_L_s & seg_null_s & volume_digits & seg_null_s & seg_null_s &seg_null_s;
+			LED_o <= SW_i;
+         
+            
+            
+            
+        end if;  
+     
+    end if;
+    					
+end process;
+
+echo_delay <=   seg_4_s & seg_0_s when echo_delay_reg =x"0FA0" else  -- 4000 cycles
+                seg_5_s & seg_0_s when echo_delay_reg =x"1388" else  -- 5000 cycles
+                seg_6_s & seg_0_s when echo_delay_reg =x"1770" else  -- 6000 cycles
+                seg_7_s & seg_0_s when echo_delay_reg =x"1B58" else  -- 7000 cycles
+                seg_8_s & seg_0_s when echo_delay_reg =x"1F40" else  -- 8000 cycles               
+                seg_0_s & seg_0_s;
+                
+volume_digits <= seg_0_s when volume_amp_s (7 downto 4)="000" else 
+                 seg_1_s when volume_amp_s (7 downto 4)="001" else 
+                 seg_2_s when volume_amp_s (7 downto 4)="010" else 
+                 seg_3_s when volume_amp_s (7 downto 4)="011" else 
+                 seg_4_s when volume_amp_s (7 downto 4)="100" else 
+                 seg_5_s when volume_amp_s (7 downto 4)="101" else 
+                 seg_6_s when volume_amp_s (7 downto 4)="110" else 
+                 seg_7_s when volume_amp_s (7 downto 4)="111" else 
+				 seg_null_s;
+
+process( Clk_i , Reset_i) 
+begin
+    if Reset_i='1' then
+        compteur_7seg <= (others => '0');
+		next_7seg <= '0';
+		SSEG_AN_s <= "01111111";
+  
+    elsif rising_edge (Clk_i) then       
+        compteur_7seg <= compteur_7seg + 1;
+		if compteur_7seg = 100000 then  -- 1kHz
+			compteur_7seg <= (others => '0');
+			next_7seg <= '1';
+		else 
+			next_7seg <= '0';
+			
+		end if;
+		if next_7seg ='1' then 
+			 SSEG_AN_s <=  SSEG_AN_s (0) & SSEG_AN_s (7 downto 1);
+		end if;
+    end if;
+    
+    
+end process;
   
   
+ process( Clk_i , Reset_i) 
+begin
+    if Reset_i='1' then
+        SSEG_CA_o  <= (others=>'0');  
+    elsif rising_edge (Clk_i) then       
+        case SSEG_AN_s(7 downto 0) is
+            when "01111111" =>             
+                SSEG_CA_o <= Text_7seg(63 downto 56);
+            when "10111111" => 
+                SSEG_CA_o <= Text_7seg(55 downto 48);
+            when "11011111" => 
+                SSEG_CA_o <= Text_7seg(47 downto 40);
+            when "11101111" => 
+                SSEG_CA_o <= Text_7seg(39 downto 32);
+            when "11110111" => 
+                SSEG_CA_o <= Text_7seg(31 downto 24);    
+            when "11111011" => 
+                SSEG_CA_o <= Text_7seg(23 downto 16); 
+            when "11111101" => 
+                SSEG_CA_o <= Text_7seg(15 downto 8);    
+            when "11111110" => 
+                SSEG_CA_o <= Text_7seg(7 downto 0);      
+            when others=>
+                SSEG_CA_o <=(others=>'0');
+        end case;
+    end if;   
+end process;
+ 
+
+    
+    
   
  Button_debounce: for i in 0 to 4 generate
         --=============================
@@ -149,15 +282,51 @@ end process;
         end if;
    end process;
 end generate;
+  
+  
+  
+  -- VOLUME
+process (Clk_i,Reset_i)
+begin
+    if Reset_i='1' then
+        volume_amp_s <="10000000"; --5_3
+    elsif rising_edge(Clk_i) then
+        if BTN_Rising_edge_s(2)='1' and  active_menu=menu_2 then
+            volume_amp_s <= volume_amp_s + "00100000";
+        elsif BTN_Rising_edge_s(4)='1'and active_menu=menu_2 then
+			volume_amp_s <= volume_amp_s - "00100000";
+        end if;
+    end if;   
+end process;
+
+
+
+
+-- ECHO FILTER DELAY Counter
+next_echo_delay_reg <=  x"0FA0" when echo_delay_reg =x"1F40" and BTN_Rising_edge_s(2)='1'and active_menu=menu_1_1 else
+                        x"1388" when echo_delay_reg =x"0FA0" and BTN_Rising_edge_s(2)='1'and active_menu=menu_1_1 else
+                        x"1770" when echo_delay_reg =x"1388" and BTN_Rising_edge_s(2)='1'and active_menu=menu_1_1 else
+                        x"1B58" when echo_delay_reg =x"1770" and BTN_Rising_edge_s(2)='1'and active_menu=menu_1_1 else
+                        x"1F40" when echo_delay_reg =x"1B58" and BTN_Rising_edge_s(2)='1'and active_menu=menu_1_1 else
+                       
+                        -- decrementation
+                        x"0FA0" when echo_delay_reg =x"1388" and BTN_Rising_edge_s(4)='1'and active_menu=menu_1_1 else
+                        x"1388" when echo_delay_reg =x"1770" and BTN_Rising_edge_s(4)='1'and active_menu=menu_1_1 else
+                        x"1770" when echo_delay_reg =x"1B58" and BTN_Rising_edge_s(4)='1'and active_menu=menu_1_1 else
+                        x"1B58" when echo_delay_reg =x"1F40" and BTN_Rising_edge_s(4)='1'and active_menu=menu_1_1 else
+                        x"1F40" when echo_delay_reg =x"0FA0" and BTN_Rising_edge_s(4)='1'and active_menu=menu_1_1 else                       
+                        echo_delay_reg;
+
+                        
+ process (Clk_i,Reset_i)
+begin
+    if Reset_i='1' then
+        echo_delay_reg <=x"0FA0"; -- 4000
+    elsif rising_edge(Clk_i) then
+        echo_delay_reg <= next_echo_delay_reg;  
+    end if;  
+end process;
    
-   
-
-
-
-
-
-
-
-
+ 
 
 END behavior;

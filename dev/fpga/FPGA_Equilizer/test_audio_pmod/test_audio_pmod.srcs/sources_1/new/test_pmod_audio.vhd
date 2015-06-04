@@ -47,7 +47,10 @@ entity test_pmod_audio is
     -- Buttons in
     BTN_i           : in std_logic_vector (4 downto 0);
     -- Debug LEDs
-    LED : out std_logic_vector(15 downto 0);    
+    LED             : out std_logic_vector(15 downto 0); 
+    SW_i            : in  std_logic_vector (15 downto 0);
+    SSEG_CA_o       : out  STD_LOGIC_VECTOR (7 downto 0);
+    SSEG_AN_o       : out  STD_LOGIC_VECTOR (7 downto 0);
     -- VGA output                                   
     VGA_Red_o           : out std_logic_vector(3 downto 0);                        
     VGA_Green_o         : out std_logic_vector(3 downto 0);                       
@@ -64,17 +67,7 @@ architecture arch of test_pmod_audio is
   --------------------------------
   -- PMOD audio out module
   --------------------------------
-  component pMOD_Audio_out
-    port (
-      clk      : in  std_logic;
-      rst      : in  std_logic;
-      audio_in : in  std_logic_vector(15 downto 0);
-      done     : out std_logic;
-      SDOUT    : out std_logic;
-      SCLK     : out std_logic;
-      MCLK     : out std_logic;
-      LRCK     : out std_logic);
-  end component;
+
 
   signal s_clk : std_logic;
   signal locked  : std_logic;
@@ -112,101 +105,11 @@ architecture arch of test_pmod_audio is
   signal Enable_48k_s : std_logic;
   signal Enable_counter: std_logic_vector (1 downto 0);
   signal Data_Ready_s : std_logic;
+  signal enable_sound_s : std_logic;
   
-  
-  
-  
-  
-  component test_pmod_audio_design_wrapper is
-    port (
-    AudioInput_o : out STD_LOGIC_VECTOR ( 11 downto 0 );
-    Audio_output_i : in STD_LOGIC_VECTOR ( 15 downto 0 );
-    Clk_50Mhz_o : out STD_LOGIC;
-    Enable_o : out STD_LOGIC;
-    audio_in_SCLK : out STD_LOGIC;
-    audio_in_SDATA : in STD_LOGIC;
-    audio_in_nCS : out STD_LOGIC;
-    audio_out_LRCK : out STD_LOGIC;
-    audio_out_MCLK : out STD_LOGIC;
-    audio_out_SCLK : out STD_LOGIC;
-    audio_out_SDOUT : out STD_LOGIC;
-    clk_108Mhz_o : out STD_LOGIC;
-    clk_in : in STD_LOGIC;
-    locked : out STD_LOGIC;
-    reset : in STD_LOGIC
-  );
-end component;
-  
-  
-  
-  component echo_filter is
-generic (
-    Delay : integer:= 4000
-    );
+  signal Filter_Echo_EN_s: std_logic;
+  signal Echo_delay_s: std_logic_vector(15 downto 0);
 
-  port (
-    Clk_i   : in std_logic;
-    Reset_i : in std_logic;
-    Enable_i : in std_logic;
-    Audio_i : in std_logic_vector ( 11 downto 0 );
-    Audio_o : out std_logic_vector ( 15 downto 0 )  
-  );
-end component;
-
-
-component mult_gen_0 IS
-  PORT (
-    CLK : IN STD_LOGIC;
-    A : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-    B : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-    P : OUT STD_LOGIC_VECTOR(23 DOWNTO 0)
-  );
-END component;
-
-
-component debouncer is
-    Generic ( DEBNC_CLOCKS : INTEGER range 2 to (INTEGER'high) := 2**16;
-              PORT_WIDTH : INTEGER range 1 to (INTEGER'high) := 5);
-    Port ( SIGNAL_I : in  STD_LOGIC_VECTOR ((PORT_WIDTH - 1) downto 0);
-           CLK_I : in  STD_LOGIC;
-           SIGNAL_O : out  STD_LOGIC_VECTOR ((PORT_WIDTH - 1) downto 0));
-end component;
-component Display_manager IS
-generic (
-        horiztonal_size      : INTEGER:= 800;
-        vertical_size        : INTEGER:= 600
-);
-    port (
-        Clk_i               : in std_logic;
-        Reset_i             : in std_logic;        
-        Bar_intensity_i     : in  BarIndex_intensity_array;
-        Data_Ready_i        : in std_logic;
-        
-         -- VGA output                                   
-        VGA_Red_o           : out std_logic_vector(3 downto 0);                        
-        VGA_Green_o         : out std_logic_vector(3 downto 0);                       
-        VGA_Blue_o          : out std_logic_vector(3 downto 0);                       
-        VGA_h_sync_o        : out std_logic;                       
-        VGA_v_sync_o        : out std_logic                       
-);
-END component;
-
-component Frequency_Analysis_top is
-generic (
-        ADC_Width: integer:= 12
-    );
-port(
-    Clk_i                               : in std_logic;
-    Reset_i                             : in std_logic;
-    -- Audio interface
-    Audio_Left_Channel_i                : in std_logic_vector (ADC_Width-1 downto 0);
-    Audio_Right_Channel_i               : in std_logic_vector (ADC_Width-1 downto 0);
-    Audio_Data_Valid_i                  : in std_logic;
-    -- user Interface
-    Bar_intensity_o                     : out  BarIndex_intensity_array;
-    Data_Ready_o                        : out std_logic
-);
-end component;
 
 begin
 
@@ -214,13 +117,13 @@ begin
   
  -- leds_o(0) <= reset;
  -- leds_o(1) <= locked;
-  Audio_output_s <=  Audio_output_echo_s; 
- Audio_amplified_normalized_s <= Audio_amplified_s(18 downto 3); -- removing 3 fraction bits
+
+ Audio_amplified_normalized_s <=  Audio_amplified_s(18 downto 3) when enable_sound_s='1' else (15=>'1', others=>'0'); -- removing 3 fraction bits
    
  --   LED(15 downto 0) <=Audio_input_16_s;
  -- LED(7 downto 0) <= Audio_input_s(11 downto 4);
  -- LED(15 downto 8) <= Audio_amplified_normalized_s(15 downto 8);
- LED(15 downto 0)<= BarIndex_intensity_s(1)(15 downto 0);
+ --LED(15 downto 0)<= BarIndex_intensity_s(1)(15 downto 0);
  -- frequency check/ divider
 process (Clk_50Mhz_s,reset)
 begin
@@ -252,12 +155,22 @@ begin
 end process;
 
  
+ 
+ -- audio output MUX
+ audio_output_s <=  (15=>'1', others=>'0') when enable_sound_s ='0' else    -- no sound
+                    Audio_output_echo_s when Filter_Echo_EN_s='1' else      -- echo sound 
+                    Audio_amplified_normalized_s ;                          -- normal sound
+ 
+              
+                 
+
+ 
   --===============================================================
 test_pmod_audio_design_i: component test_pmod_audio_design_wrapper
  --===============================================================
     port map (
       AudioInput_o => Audio_input_s,
-      Audio_output_i => Audio_amplified_normalized_s ,--Audio_amplified_normalized_s, --Audio_output_s,
+      Audio_output_i => audio_output_s ,--Audio_amplified_normalized_s, --Audio_output_s,
       audio_in_SCLK => s_audio_in_SCLK,
       Enable_o => Enable_s,
       Clk_50Mhz_o => Clk_50Mhz_s,
@@ -277,24 +190,26 @@ test_pmod_audio_design_i: component test_pmod_audio_design_wrapper
 
 -- Volume
 
-process (Clk_50Mhz_s,reset)
-begin
-    if reset='1' then
-        volume_amp_s <="10000000";
-    elsif rising_edge(Clk_50Mhz_s) then
-        if BTN_Rising_edge_s(2)='1' then
-            volume_amp_s <= volume_amp_s + "00000001";
+-- process (Clk_50Mhz_s,reset)
+-- begin
+    -- if reset='1' then
+        -- volume_amp_s <="10000000";
+    -- elsif rising_edge(Clk_50Mhz_s) then
+        -- if BTN_Rising_edge_s(2)='1' then
+            -- volume_amp_s <= volume_amp_s + "00000001";
     
-        elsif BTN_Rising_edge_s(4)='1' then
-            volume_amp_s <= volume_amp_s - "00000001";
-        end if;
-    end if;
+        -- elsif BTN_Rising_edge_s(4)='1' then
+            -- volume_amp_s <= volume_amp_s - "00000001";
+        -- end if;
+    -- end if;
     
-end process;
+-- end process;
 
 
+-- passing from 12 bits signed to 16 bit signed
+Audio_input_16_s <= "0000" & Audio_input_s when Audio_input_s(Audio_input_s'high)='0' else
+                    "1111" & Audio_input_s;
 
-Audio_input_16_s <= "0000" & Audio_input_s(Audio_input_s'high downto 1) &'0';
 -- 16_0 * 5_3= 20_4
 --
 --====================== 
@@ -318,20 +233,21 @@ Audio_input_16_s <= "0000" & Audio_input_s(Audio_input_s'high downto 1) &'0';
 
 
     
--- --=========================
-  -- Filtre_Echo: echo_filter
--- --=========================
--- generic map (
-    -- Delay => 4000
-    -- )
+--=========================
+  Filtre_Echo: echo_filter
+--=========================
+generic map (
+    Delay => 4000
+    )
 
-  -- port map(
-    -- Clk_i       => Clk_50Mhz_s,
-    -- Reset_i     => reset,        
-    -- Enable_i    => Enable_s,        
-    -- Audio_i     => Audio_amplified_normalized_s,        
-    -- Audio_o     => Audio_output_echo_s        
-  -- );
+  port map(
+    Clk_i       => Clk_50Mhz_s,
+    Reset_i     => reset,        
+    Enable_i    => Enable_s,  
+    Echo_delay_i=> Echo_delay_s,     
+    Audio_i     => Audio_amplified_normalized_s,        
+    Audio_o     => Audio_output_echo_s        
+  );
       
    
       
@@ -398,6 +314,10 @@ Display: Display_manager
         Reset_i             => reset,             
         Bar_intensity_i     => BarIndex_intensity_input_s, --BarIndex_intensity_dummy_C           
         Data_Ready_i        => '0',
+         -- audio in
+        Clk_50Mhz_i         => Clk_50Mhz_s, 
+        Audio_i             => Audio_amplified_normalized_s, 
+        Audio_valid_i       => Enable_s, 
         -- VGA output                                   
         VGA_Red_o           => VGA_Red_o,                              
         VGA_Green_o         => VGA_Green_o,                             
@@ -427,4 +347,45 @@ port map(
 );
 
 
+
+
+
+
+--=======================
+Interface_menu : Menu
+ --=======================   
+   port map(
+        Clk_i                  => Clk_50Mhz_s,        
+        Reset_i                => reset,      
+        -- FPGA inputs                
+        BTN_i                  => BTN_i,       
+        SW_i                   => SW_i,     
+                                    
+        -- fpga outputs                
+        LED_o                  => LED,            
+        SSEG_CA_o 		       => SSEG_CA_o,       
+        SSEG_AN_o		       => SSEG_AN_o,        
+        
+        -- user interface
+        enable_sound_o        => enable_sound_s,
+        volume_o              => volume_amp_s,   
+        Filter_Echo_EN_o      => Filter_Echo_EN_s, 
+        Filter_Echo_delay_o   => Echo_delay_s,
+        Filter_1_Addaptive_EN_o    => open, 
+        Filter_2_Addaptive_EN_o    => open, 
+        -- display               
+        Display_Title_EN_o         => open, 
+        Display_Scope_EN_o         => open, 
+        Display_Bars_EN_o          => open 
+);
+
+
+  
+
+
+
+
+
 end arch;
+
+

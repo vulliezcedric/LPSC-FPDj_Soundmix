@@ -31,6 +31,21 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PSRCDIR/sources_1/bd/test_pmod_audio_design/test_pmod_audio_design.bd">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+        <CompFileExtendedInfo CompFileName="test_pmod_audio_design.bd" FileRelPathName="hw_handoff/test_pmod_audio_design.hwh"/>
+        <CompFileExtendedInfo CompFileName="test_pmod_audio_design.bd" FileRelPathName="ip/test_pmod_audio_design_not_gate_0_0/test_pmod_audio_design_not_gate_0_0.xci"/>
+        <CompFileExtendedInfo CompFileName="test_pmod_audio_design.bd" FileRelPathName="hdl/test_pmod_audio_design.vhd"/>
+        <CompFileExtendedInfo CompFileName="test_pmod_audio_design.bd" FileRelPathName="ip/test_pmod_audio_design_pMOD_Audio_out_0_0/test_pmod_audio_design_pMOD_Audio_out_0_0.xci"/>
+        <CompFileExtendedInfo CompFileName="test_pmod_audio_design.bd" FileRelPathName="ip/test_pmod_audio_design_clk_wiz_0_0/test_pmod_audio_design_clk_wiz_0_0.xci"/>
+        <CompFileExtendedInfo CompFileName="test_pmod_audio_design.bd" FileRelPathName="test_pmod_audio_design_ooc.xdc"/>
+        <CompFileExtendedInfo CompFileName="test_pmod_audio_design.bd" FileRelPathName="hw_handoff/test_pmod_audio_design_bd.tcl"/>
+        <CompFileExtendedInfo CompFileName="test_pmod_audio_design.bd" FileRelPathName="ip/test_pmod_audio_design_pMOD_Audio_in_0_0/test_pmod_audio_design_pMOD_Audio_in_0_0.xci"/>
+      </File>
       <File Path="$PPRDIR/../../src/vga_Manager.vhd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -43,22 +58,7 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/bd/test_pmod_audio_design/test_pmod_audio_design.bd">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-        <CompFileExtendedInfo CompFileName="test_pmod_audio_design.bd" FileRelPathName="hw_handoff/test_pmod_audio_design_bd.tcl"/>
-        <CompFileExtendedInfo CompFileName="test_pmod_audio_design.bd" FileRelPathName="hw_handoff/test_pmod_audio_design.hwh"/>
-        <CompFileExtendedInfo CompFileName="test_pmod_audio_design.bd" FileRelPathName="test_pmod_audio_design_ooc.xdc"/>
-        <CompFileExtendedInfo CompFileName="test_pmod_audio_design.bd" FileRelPathName="ip/test_pmod_audio_design_not_gate_0_0/test_pmod_audio_design_not_gate_0_0.xci"/>
-        <CompFileExtendedInfo CompFileName="test_pmod_audio_design.bd" FileRelPathName="hdl/test_pmod_audio_design.vhd"/>
-        <CompFileExtendedInfo CompFileName="test_pmod_audio_design.bd" FileRelPathName="ip/test_pmod_audio_design_pMOD_Audio_out_0_0/test_pmod_audio_design_pMOD_Audio_out_0_0.xci"/>
-        <CompFileExtendedInfo CompFileName="test_pmod_audio_design.bd" FileRelPathName="ip/test_pmod_audio_design_pMOD_Audio_in_0_0/test_pmod_audio_design_pMOD_Audio_in_0_0.xci"/>
-        <CompFileExtendedInfo CompFileName="test_pmod_audio_design.bd" FileRelPathName="ip/test_pmod_audio_design_clk_wiz_0_0/test_pmod_audio_design_clk_wiz_0_0.xci"/>
-      </File>
-      <File Path="$PPRDIR/../../src/FFT_Manager.vhd">
+      <File Path="$PPRDIR/../../src/Scope.vhd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -70,13 +70,21 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/../../src/Scope.vhd">
+      <File Path="$PPRDIR/../../src/FFT_Manager.vhd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/../../src/Display_manager.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/new/debouncer.vhd">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../Nexys4_Vivado_Basic/Nexys4_Vivado_Basic/source/Nexys4_Vivado_Basic/Nexys4_Vivado_Basic.srcs/sources_1/new/debouncer.vhd"/>
+          <Attr Name="ImportTime" Val="1378222786"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../../src/echo_filter.vhd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -88,10 +96,14 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/imports/new/debouncer.vhd">
+      <File Path="$PPRDIR/../../src/Menu.vhd">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../Nexys4_Vivado_Basic/Nexys4_Vivado_Basic/source/Nexys4_Vivado_Basic/Nexys4_Vivado_Basic.srcs/sources_1/new/debouncer.vhd"/>
-          <Attr Name="ImportTime" Val="1378222786"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../../src/Display_manager.vhd">
+        <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
@@ -109,12 +121,6 @@
         </FileInfo>
       </File>
       <File Path="$PPRDIR/../../src/Intensity_Bands_Format.vhd">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/../../src/echo_filter.vhd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>

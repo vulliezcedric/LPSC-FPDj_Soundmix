@@ -256,13 +256,13 @@ begin
     elsif rising_edge (Clk_i) then
         if Scope_input_i(conv_integer(Scope_Row_counter_s)) ='1' then
            case Scope_Row_inter_counter_s(3 downto 0) is
-               when x"0" | x"B" => Scope_Color <= x"100";
+               when x"0" | x"A" => Scope_Color <= x"100";
                when x"1" | x"9" => Scope_Color <= x"300";
                when x"2" | x"8" => Scope_Color <= x"600";
                when x"3" | x"7" => Scope_Color <= x"900";
                when x"4" | x"6" => Scope_Color <= x"c00";
                when x"5"        => Scope_Color <= x"F00";
-               when others      =>Scope_Color  <= x"000";                
+               when others      =>Scope_Color  <= x"F00";                
             end case;
             --Scope_Color <=x"F00";
         else

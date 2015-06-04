@@ -164,7 +164,7 @@ proc create_root_design { parentCell } {
 
   # Create instance: clk_wiz_0, and set properties
   set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.1 clk_wiz_0 ]
-  set_property -dict [ list CONFIG.CLKOUT1_JITTER {116.371} CONFIG.CLKOUT1_PHASE_ERROR {79.592} CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {50.000} CONFIG.CLKOUT2_JITTER {101.304} CONFIG.CLKOUT2_PHASE_ERROR {79.592} CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {108.000} CONFIG.CLKOUT2_USED {true} CONFIG.MMCM_CLKFBOUT_MULT_F {14} CONFIG.MMCM_CLKOUT0_DIVIDE_F {28} CONFIG.MMCM_CLKOUT1_DIVIDE {13} CONFIG.MMCM_DIVCLK_DIVIDE {1} CONFIG.NUM_OUT_CLKS {2} CONFIG.PRIMITIVE {PLL}  ] $clk_wiz_0
+  set_property -dict [ list CONFIG.CLKOUT1_JITTER {116.371} CONFIG.CLKOUT1_PHASE_ERROR {79.592} CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {50.000} CONFIG.CLKOUT2_JITTER {101.304} CONFIG.CLKOUT2_PHASE_ERROR {79.592} CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {108.000} CONFIG.CLKOUT2_USED {true} CONFIG.NUM_OUT_CLKS {2} CONFIG.PRIMITIVE {PLL}  ] $clk_wiz_0
 
   # Create instance: not_gate_0, and set properties
   set not_gate_0 [ create_bd_cell -type ip -vlnv hepia:user:not_gate:1.0 not_gate_0 ]

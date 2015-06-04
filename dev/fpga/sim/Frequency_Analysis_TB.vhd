@@ -17,12 +17,15 @@ architecture behevioral of Frequency_Analysis_TB is
  -----------------------------------------------------------------------
   -- Timing constants
   -----------------------------------------------------------------------
-  constant CLOCK_PERIOD : time := 100 ns;
+  constant CLOCK_PERIOD : time := 20 ns; -- 50mhz
+  constant CLOCK_PERIOD_108 : time := 9.2 ns; -- 108mhz
   constant T_HOLD       : time := 10 ns;
   constant T_STROBE     : time := CLOCK_PERIOD - (1 ns);
 
   -- General signals
   signal aclk                           : std_logic := '0';  -- the master clock
+  signal aclk_108                           : std_logic := '0';  -- the 108mhz clock
+  
  signal Reset_s                         : std_logic := '0'; 
   -----------------------------------------------------------------------
   -- Constants, types and functions to create input data
@@ -93,15 +96,18 @@ end component;
  
 component Display_manager IS
 generic (
-        horiztonal_size      : INTEGER:= 1280;
-        vertical_size        : INTEGER:= 1024
+        horiztonal_size      : INTEGER:= 800;
+        vertical_size        : INTEGER:= 600
 );
     port (
         Clk_i               : in std_logic;
         Reset_i             : in std_logic;        
         Bar_intensity_i     : in  BarIndex_intensity_array;
         Data_Ready_i        : in std_logic;
-        
+        -- audio in
+        Clk_50Mhz_i         : in std_logic;
+        Audio_i             : in std_logic_vector(15 downto 0);  
+        Audio_valid_i       : in std_logic;
          -- VGA output                                   
         VGA_Red_o           : out std_logic_vector(3 downto 0);                        
         VGA_Green_o         : out std_logic_vector(3 downto 0);                       
@@ -109,7 +115,7 @@ generic (
         VGA_h_sync_o        : out std_logic;                       
         VGA_v_sync_o        : out std_logic                       
 );
-END component; 
+END component;
 
 signal Audio_Left_Channel_s                : std_logic_vector (15 downto 0);
 signal Audio_Right_Channel_s               : std_logic_vector (15 downto 0);
@@ -135,7 +141,21 @@ begin
       wait for CLOCK_PERIOD/2;
     end loop;
   end process clock_gen;
-
+  
+  clock_gen_108 : process
+  begin
+    aclk_108 <= '0';
+    wait for CLOCK_PERIOD_108;
+    loop
+      aclk_108 <= '0';
+      wait for CLOCK_PERIOD_108/2;
+      aclk_108 <= '1';
+      wait for CLOCK_PERIOD_108/2;
+    end loop;
+  end process clock_gen_108;
+  
+  
+  
   -----------------------------------------------------------------------
   -- Generate Reset
   -----------------------------------------------------------------------
@@ -323,10 +343,14 @@ Display: Display_manager
         vertical_size      => 1024
     )
     port map (
-        Clk_i               => aclk,           
+        Clk_i               => aclk_108,           
         Reset_i             => Reset_s,             
         Bar_intensity_i     => Bar_intensity_s, --BarIndex_intensity_dummy_C,  --          
         Data_Ready_i        => Data_Ready_s,
+        -- audio in
+        Clk_50Mhz_i         => aclk,
+        Audio_i             => Audio_Left_Channel_s,  
+        Audio_valid_i       => Data_valid_s,
         -- VGA output                                   
         VGA_Red_o           => open,                              
         VGA_Green_o         => open,                             
@@ -334,5 +358,8 @@ Display: Display_manager
         VGA_h_sync_o        => open,            
         VGA_v_sync_o        => open   
     );
+    
+    
+                   
 
 end behevioral;
